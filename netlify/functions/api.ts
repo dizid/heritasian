@@ -74,7 +74,7 @@ function transformHotel(row: Record<string, unknown>) {
     id: row.id as string,
     slug: row.slug as string,
     name: row.name as string,
-    country: row.country as string,
+    country: row.country_code as string,
     city: row.city as string,
     yearBuilt: row.year_built as number,
     originalPurpose: row.original_purpose as string,
@@ -146,7 +146,7 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
   let paramIndex = 1
 
   if (countries.length > 0) {
-    conditions.push(`country = ANY($${paramIndex}::text[])`)
+    conditions.push(`country_code = ANY($${paramIndex}::text[])`)
     values.push(countries)
     paramIndex++
   }
@@ -177,7 +177,7 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
   const query = `
     WITH scored AS (
       SELECT
-        id, slug, name, country, city, year_built, original_purpose,
+        id, slug, name, country_code, city, year_built, original_purpose,
         architectural_style, description, highlights, image_url, website_url,
         price_range,
         score_historical_significance, score_architectural_integrity, score_cultural_immersion,
@@ -191,12 +191,12 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
     ORDER BY ${sortColumn} ${order}
   `
 
-  const rows = await sql(query, values)
+  const rows = await sql.query(query, values)
   return ok(rows.map(transformHotel))
 }
 
 async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string): Promise<HandlerResponse> {
-  const rows = await sql(`
+  const rows = await sql.query(`
     WITH scored AS (
       SELECT
         h.*,

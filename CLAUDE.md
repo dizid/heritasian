@@ -56,10 +56,19 @@ The function computes HHI in SQL via a CTE and transforms flat DB rows into the 
 
 `@` maps to `src/` (configured in `vite.config.ts`).
 
+## Deployment
+
+- **GitHub:** https://github.com/dizid/heritasian
+- **Netlify site:** heritasian (ID: a0128d79-b04e-4eab-8a07-f382a2a06417)
+- **Netlify URL:** https://heritasian.netlify.app
+- **Neon project:** heritasian (ID: solitary-glitter-26300820)
+- **Neon branch:** main (ID: br-red-violet-akwqhdc7)
+- **Neon database:** neondb
+
 ## Environment
 
 `DATABASE_URL` — Neon PostgreSQL connection string (see `.env.example`).
 
 ## Database
 
-Tables: `hotels` (all score columns are `score_*` snake_case), `timeline_events` (foreign key to `hotels.id`). No migrations directory exists yet — schema managed directly.
+Tables: `hotels` (all score columns are `score_*` snake_case), `timeline_events` (foreign key to `hotels.id`), `countries`. No migrations directory exists yet — schema managed directly.
