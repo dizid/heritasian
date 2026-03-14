@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  /* Heritage luxury color palette */
+  --color-heritage-gold: #c9a96e;
+  --color-heritage-gold-light: #dcc599;
+  --color-heritage-gold-dim: rgba(201, 169, 110, 0.15);
+  --color-heritage-burgundy: #6b2d3e;
+  --color-heritage-burgundy-light: #8a4558;
+  --color-heritage-dark: #0f0d0b;
+  --color-heritage-surface: #1a1714;
+  --color-heritage-surface-light: #252119;
+  --color-heritage-surface-hover: #2e2820;
+  --color-heritage-text: #f0ebe3;
+  --color-heritage-text-secondary: #a89e90;
+  --color-heritage-border: rgba(201, 169, 110, 0.2);
+
+  /* Tier colors */
+  --color-tier-landmark: #c9a96e;
+  --color-tier-distinguished: #a8b4a0;
+  --color-tier-notable: #8b9fc5;
+  --color-tier-emerging: #b08d8d;
+
+  /* Typography */
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-heritage-dark);
+  color: var(--color-heritage-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Glass morphism utility */
+.glass {
+  backdrop-filter: blur(12px);
+  background: rgba(26, 23, 20, 0.75);
+  border: 1px solid var(--color-heritage-border);
+}
+
+.glass-light {
+  backdrop-filter: blur(8px);
+  background: rgba(37, 33, 25, 0.6);
+  border: 1px solid var(--color-heritage-border);
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #dcc599 0%, #c9a96e 50%, #b8944f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle gold border glow */
+.border-gold-glow {
+  box-shadow: 0 0 20px rgba(201, 169, 110, 0.08), inset 0 0 20px rgba(201, 169, 110, 0.03);
+}
+
+/* Score bar animations */
+.score-bar-fill {
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth page transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-heritage-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-heritage-surface-light);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-heritage-gold-dim);
+}
