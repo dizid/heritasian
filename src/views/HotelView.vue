@@ -8,6 +8,8 @@ import ScoreBar from '@/components/shared/ScoreBar.vue'
 import HotelScoreBadge from '@/components/hotel/HotelScoreBadge.vue'
 import HotelRadarChart from '@/components/hotel/HotelRadarChart.vue'
 import HotelTimeline from '@/components/hotel/HotelTimeline.vue'
+import { useHead } from '@unhead/vue'
+import { useSeo } from '@/composables/useSeo'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
@@ -30,6 +32,56 @@ onMounted(async () => {
 const country = computed(() =>
   hotel.value ? COUNTRIES.find(c => c.code === hotel.value!.country) : null
 )
+
+// Dynamic SEO meta tags
+useSeo(() => {
+  if (!hotel.value) {
+    return { title: 'Hotel Details', path: `/hotel/${slug.value}` }
+  }
+  const h = hotel.value
+  const countryName = country.value?.name ?? ''
+  return {
+    title: `${h.name} — ${h.city}, ${countryName}`,
+    description: `${h.name} in ${h.city}, ${countryName}. Heritage Hotel Index score: ${h.hhi}/100 (${h.tier}). Built ${h.yearBuilt}. ${h.description.slice(0, 120)}...`,
+    path: `/hotel/${h.slug}`,
+    ogImage: h.imageUrl,
+  }
+})
+
+// Hotel structured data (LodgingBusiness)
+useHead(() => {
+  if (!hotel.value) return {}
+  const h = hotel.value
+  const countryName = country.value?.name ?? ''
+  return {
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'LodgingBusiness',
+          name: h.name,
+          url: h.websiteUrl,
+          image: h.imageUrl,
+          description: h.description,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: h.city,
+            addressCountry: countryName,
+          },
+          foundingDate: String(h.yearBuilt),
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: h.hhi,
+            bestRating: 100,
+            worstRating: 0,
+            ratingCount: 1,
+          },
+        }),
+      },
+    ],
+  }
+})
 
 const scoreGroups = computed(() => {
   if (!hotel.value) return []

@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { TIER_CONFIG } from '@/types'
+import { useSeo } from '@/composables/useSeo'
+
+useSeo({
+  title: 'Our Methodology',
+  description: 'How the Heritage Hotel Index (HHI) works: a transparent, weighted scoring system across 9 dimensions measuring heritage authenticity, guest experience, and operational excellence.',
+  path: '/methodology',
+})
 
 const pillars = [
   {

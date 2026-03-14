@@ -4,7 +4,14 @@ import { useRoute, useRouter } from 'vue-router'
 import type { CountryCode, Tier, PriceRange } from '@/types'
 import { getPillarScore } from '@/types'
 import { useHotels } from '@/composables/useHotels'
+import { useSeo } from '@/composables/useSeo'
 import RankingsFilter from '@/components/rankings/RankingsFilter.vue'
+
+useSeo({
+  title: 'Heritage Hotel Rankings',
+  description: "Discover Southeast Asia's finest heritage hotels, independently rated and ranked by the Heritage Hotel Index across heritage authenticity, guest experience, and operational excellence.",
+  path: '/rankings',
+})
 import RankingsList from '@/components/rankings/RankingsList.vue'
 import type { FilterState } from '@/components/rankings/RankingsFilter.vue'
 

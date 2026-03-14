@@ -223,6 +223,43 @@ async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string):
   return ok(transformHotel(rows[0] as Record<string, unknown>))
 }
 
+async function handleSitemap(sql: ReturnType<typeof neon>): Promise<HandlerResponse> {
+  const baseUrl = 'https://heritasian.netlify.app'
+
+  // Get all hotel slugs
+  let hotelSlugs: string[] = []
+  try {
+    const rows = await sql`SELECT slug FROM hotels ORDER BY slug`
+    hotelSlugs = rows.map((r: Record<string, unknown>) => r.slug as string)
+  } catch {
+    // Table may be empty or not exist yet — generate sitemap without hotel pages
+  }
+
+  const staticPages = [
+    { loc: '/', priority: '1.0', changefreq: 'weekly' },
+    { loc: '/rankings', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/methodology', priority: '0.6', changefreq: 'monthly' },
+  ]
+
+  const hotelPages = hotelSlugs.map(slug => ({
+    loc: `/hotel/${slug}`,
+    priority: '0.8',
+    changefreq: 'weekly' as const,
+  }))
+
+  const urls = [...staticPages, ...hotelPages]
+    .map(p => `  <url>\n    <loc>${baseUrl}${p.loc}</loc>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`)
+    .join('\n')
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`
+
+  return {
+    statusCode: 200,
+    headers: { ...CORS_HEADERS, 'Content-Type': 'application/xml' },
+    body: xml,
+  }
+}
+
 export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResponse> => {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -257,6 +294,10 @@ export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResp
     const slugMatch = path.match(/^\/hotels\/([^/]+)$/)
     if (slugMatch) {
       return await handleGetHotelBySlug(sql, slugMatch[1])
+    }
+
+    if (path === '/sitemap.xml') {
+      return await handleSitemap(sql)
     }
 
     return err(404, 'Route not found')
