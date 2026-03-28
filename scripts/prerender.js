@@ -36,11 +36,23 @@ async function prerender() {
     process.exit(0) // Don't fail the build
   }
 
+  // Validate build outputs exist
+  const templatePath = path.resolve(distDir, 'index.html')
+  const ssrEntryPath = path.resolve(distDir, 'server', 'entry-server.js')
+  if (!fs.existsSync(templatePath)) {
+    console.error('[prerender] dist/index.html not found — run vite build first')
+    process.exit(1)
+  }
+  if (!fs.existsSync(ssrEntryPath)) {
+    console.error('[prerender] dist/server/entry-server.js not found — run vite build --ssr first')
+    process.exit(1)
+  }
+
   // Import the SSR entry module (built by Vite)
-  const { render } = await import(path.resolve(distDir, 'server', 'entry-server.js'))
+  const { render } = await import(ssrEntryPath)
 
   // Read the client-built HTML template
-  const template = fs.readFileSync(path.resolve(distDir, 'index.html'), 'utf-8')
+  const template = fs.readFileSync(templatePath, 'utf-8')
 
   // Fetch hotel slugs from DB for dynamic routes
   const { neon } = await import('@neondatabase/serverless')
@@ -74,9 +86,12 @@ async function prerender() {
       let page = template
         .replace('<!--ssr-outlet-->', appHtml)
 
-      // Inject head tags before </head>
+      // Inject head tags before </head>, stripping duplicates already in template
       if (head.headTags) {
-        page = page.replace('</head>', `${head.headTags}\n</head>`)
+        const filtered = head.headTags
+          .replace(/<meta charset="[^"]*">\n?/gi, '')
+          .replace(/<meta name="viewport"[^>]*>\n?/gi, '')
+        page = page.replace('</head>', `${filtered}\n</head>`)
       }
 
       // Inject html attributes (replace entire tag to avoid duplicate lang="en")

@@ -50,8 +50,12 @@ export function useHotels() {
     try {
       // During SSR: query Neon DB directly (API server not available)
       if (import.meta.env.SSR) {
+        if (!process.env.DATABASE_URL) {
+          error.value = 'Database not configured'
+          return
+        }
         const { fetchAllHotels } = await import('@/data/db')
-        hotels.value = await fetchAllHotels(process.env.DATABASE_URL!)
+        hotels.value = await fetchAllHotels(process.env.DATABASE_URL)
         return
       }
 
@@ -76,8 +80,9 @@ export function useHotels() {
     try {
       // During SSR: query Neon DB directly (API server not available)
       if (import.meta.env.SSR) {
+        if (!process.env.DATABASE_URL) return null
         const { fetchHotelBySlug } = await import('@/data/db')
-        return fetchHotelBySlug(process.env.DATABASE_URL!, slug)
+        return fetchHotelBySlug(process.env.DATABASE_URL, slug)
       }
 
       const response = await fetch(`${API_BASE}/hotels/${encodeURIComponent(slug)}`)

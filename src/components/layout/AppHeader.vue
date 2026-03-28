@@ -64,8 +64,10 @@ function isActive(path: string): boolean {
 
         <!-- Mobile hamburger -->
         <button
-          class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+          class="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5"
           :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+          :aria-expanded="mobileMenuOpen"
+          aria-controls="mobile-nav"
           @click="toggleMenu"
         >
           <span
@@ -88,9 +90,10 @@ function isActive(path: string): boolean {
     <Transition name="fade">
       <div
         v-if="mobileMenuOpen"
+        id="mobile-nav"
         class="md:hidden glass border-t border-heritage-border"
       >
-        <nav class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+        <nav class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1" aria-label="Mobile navigation">
           <RouterLink
             v-for="link in navLinks"
             :key="link.to"

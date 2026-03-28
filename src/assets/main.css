@@ -12,14 +12,14 @@
   --color-heritage-surface-light: #252119;
   --color-heritage-surface-hover: #2e2820;
   --color-heritage-text: #f0ebe3;
-  --color-heritage-text-secondary: #a89e90;
+  --color-heritage-text-secondary: #c4b9ab;
   --color-heritage-border: rgba(201, 169, 110, 0.2);
 
-  /* Tier colors */
+  /* Tier colors (WCAG AA compliant on dark background) */
   --color-tier-landmark: #c9a96e;
-  --color-tier-distinguished: #a8b4a0;
-  --color-tier-notable: #8b9fc5;
-  --color-tier-emerging: #b08d8d;
+  --color-tier-distinguished: #b5c1ad;
+  --color-tier-notable: #a3b3d4;
+  --color-tier-emerging: #c9a5a5;
 
   /* Typography */
   --font-heading: "Playfair Display", serif;

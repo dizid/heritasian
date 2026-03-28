@@ -81,7 +81,7 @@ export function transformHotel(row: Record<string, unknown>): Hotel {
     tier: deriveTier(hhi),
     pillarScores,
     timeline: (row.timeline as Array<{ year: number; event: string }>) ?? [],
-  } as Hotel & { pillarScores: { ha: number; ge: number; oe: number } }
+  }
 }
 
 // Fetch all hotels with HHI scores, sorted by HHI descending

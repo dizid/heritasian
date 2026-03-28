@@ -24,8 +24,15 @@ useHead({
 
 <template>
   <div class="min-h-screen flex flex-col">
+    <!-- Skip to content for keyboard users (WCAG 2.1 AA) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:bg-heritage-gold focus:text-heritage-dark focus:rounded-lg focus:font-semibold focus:text-sm"
+    >
+      Skip to content
+    </a>
     <AppHeader />
-    <main class="flex-1">
+    <main id="main-content" class="flex-1">
       <router-view />
     </main>
     <AppFooter />

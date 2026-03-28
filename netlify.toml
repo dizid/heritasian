@@ -45,6 +45,9 @@
   to = "/.netlify/functions/api/sitemap.xml"
   status = 200
 
+# SPA catch-all — serves index.html for client-side routing on non-prerendered paths.
+# Netlify automatically serves 404.html (with status 404) when no static file
+# AND no redirect matches, so true 404s are handled correctly.
 [[redirects]]
   from = "/*"
   to = "/index.html"

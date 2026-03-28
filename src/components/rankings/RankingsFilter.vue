@@ -60,7 +60,7 @@ const sortOptions = [
   { value: 'ha', label: 'Heritage & Authenticity' },
   { value: 'ge', label: 'Guest Experience' },
   { value: 'oe', label: 'Operational Excellence' },
-  { value: 'yearBuilt', label: 'Year Built' },
+  { value: 'year', label: 'Year Built' },
   { value: 'name', label: 'Name' },
 ]
 
@@ -80,10 +80,11 @@ const selectClass =
     <div class="flex flex-wrap gap-3 items-end">
       <!-- Country -->
       <div class="relative">
-        <label class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-country" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
           Country
         </label>
         <select
+          id="filter-country"
           :value="modelValue.country"
           :class="selectClass"
           @change="update('country', ($event.target as HTMLSelectElement).value)"
@@ -102,10 +103,11 @@ const selectClass =
 
       <!-- Tier -->
       <div class="relative">
-        <label class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-tier" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
           Tier
         </label>
         <select
+          id="filter-tier"
           :value="modelValue.tier"
           :class="selectClass"
           @change="update('tier', ($event.target as HTMLSelectElement).value)"
@@ -124,10 +126,11 @@ const selectClass =
 
       <!-- Price Range -->
       <div class="relative">
-        <label class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-price" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
           Price
         </label>
         <select
+          id="filter-price"
           :value="modelValue.priceRange"
           :class="selectClass"
           @change="update('priceRange', ($event.target as HTMLSelectElement).value)"
@@ -146,10 +149,11 @@ const selectClass =
 
       <!-- Sort -->
       <div class="relative">
-        <label class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-sort" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
           Sort By
         </label>
         <select
+          id="filter-sort"
           :value="modelValue.sort"
           :class="selectClass"
           @change="update('sort', ($event.target as HTMLSelectElement).value)"
@@ -167,9 +171,9 @@ const selectClass =
 
       <!-- Order toggle -->
       <div>
-        <label class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <span class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5" aria-hidden="true">
           Order
-        </label>
+        </span>
         <button
           class="glass-light rounded-lg px-4 py-2 text-sm font-medium text-heritage-text border border-heritage-border hover:border-heritage-gold/40 transition-colors duration-200 flex items-center gap-2"
           @click="toggleOrder"

@@ -85,9 +85,19 @@ const chartOptions = computed(() => ({
 </script>
 
 <template>
-  <div class="w-full max-w-xs mx-auto">
+  <div
+    class="w-full max-w-xs mx-auto"
+    role="img"
+    :aria-label="`Heritage scores: Heritage & Authenticity ${pillar.ha}, Guest Experience ${pillar.ge}, Operational Excellence ${pillar.oe}`"
+  >
     <!-- Chart.js requires Canvas API — skip during SSR -->
     <Radar v-if="!isSSR" :data="chartData" :options="chartOptions" />
-    <div v-else class="h-48 bg-heritage-surface rounded animate-pulse" />
+    <div v-else class="h-48 bg-heritage-surface rounded animate-pulse" aria-hidden="true" />
+    <!-- Screen reader fallback -->
+    <dl class="sr-only">
+      <dt>Heritage &amp; Authenticity</dt><dd>{{ pillar.ha }}</dd>
+      <dt>Guest Experience</dt><dd>{{ pillar.ge }}</dd>
+      <dt>Operational Excellence</dt><dd>{{ pillar.oe }}</dd>
+    </dl>
   </div>
 </template>

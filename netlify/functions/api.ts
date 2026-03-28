@@ -142,15 +142,16 @@ async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string):
 }
 
 async function handleSitemap(sql: ReturnType<typeof neon>): Promise<HandlerResponse> {
-  const baseUrl = 'https://heritasian.netlify.app'
+  const baseUrl = process.env.URL || process.env.DEPLOY_URL || 'https://heritasian.netlify.app'
+  const today = new Date().toISOString().split('T')[0]
 
   // Get all hotel slugs
   let hotelSlugs: string[] = []
   try {
     const rows = await sql`SELECT slug FROM hotels ORDER BY slug`
-    hotelSlugs = rows.map((r: Record<string, unknown>) => r.slug as string)
-  } catch {
-    // Table may be empty or not exist yet — generate sitemap without hotel pages
+    hotelSlugs = rows.filter(r => r?.slug).map((r: Record<string, unknown>) => String(r.slug))
+  } catch (e) {
+    console.warn('[sitemap] Failed to fetch hotel slugs:', e instanceof Error ? e.message : e)
   }
 
   const staticPages = [
@@ -166,7 +167,7 @@ async function handleSitemap(sql: ReturnType<typeof neon>): Promise<HandlerRespo
   }))
 
   const urls = [...staticPages, ...hotelPages]
-    .map(p => `  <url>\n    <loc>${baseUrl}${p.loc}</loc>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`)
+    .map(p => `  <url>\n    <loc>${baseUrl}${p.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`)
     .join('\n')
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`

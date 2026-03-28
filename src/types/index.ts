@@ -42,6 +42,7 @@ export interface Hotel {
   scores: HHIScores
   hhi: number
   tier: Tier
+  pillarScores: { ha: number; ge: number; oe: number }
   timeline: TimelineEvent[]
 }
 
@@ -65,9 +66,9 @@ export const COUNTRIES: Country[] = [
 
 export const TIER_CONFIG: Record<Tier, { label: string; min: number; max: number; color: string }> = {
   landmark: { label: 'Heritage Landmark', min: 85, max: 100, color: '#c9a96e' },
-  distinguished: { label: 'Heritage Distinguished', min: 70, max: 84, color: '#a8b4a0' },
-  notable: { label: 'Heritage Notable', min: 55, max: 69, color: '#8b9fc5' },
-  emerging: { label: 'Heritage Emerging', min: 40, max: 54, color: '#b08d8d' },
+  distinguished: { label: 'Heritage Distinguished', min: 70, max: 84, color: '#b5c1ad' },
+  notable: { label: 'Heritage Notable', min: 55, max: 69, color: '#a3b3d4' },
+  emerging: { label: 'Heritage Emerging', min: 40, max: 54, color: '#c9a5a5' },
 }
 
 export function getTier(score: number): Tier {

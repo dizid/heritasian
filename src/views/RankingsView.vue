@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onServerPrefetch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import type { CountryCode, Tier, PriceRange } from '@/types'
-import { getPillarScore } from '@/types'
 import { useHotels } from '@/composables/useHotels'
 import { useSeo } from '@/composables/useSeo'
+import { SITE_URL } from '@/seo/constants'
 import RankingsFilter from '@/components/rankings/RankingsFilter.vue'
 
 useSeo({
@@ -64,15 +65,15 @@ const filteredHotels = computed(() => {
         valA = a.hhi; valB = b.hhi
         break
       case 'ha':
-        valA = getPillarScore(a.scores).ha; valB = getPillarScore(b.scores).ha
+        valA = a.pillarScores.ha; valB = b.pillarScores.ha
         break
       case 'ge':
-        valA = getPillarScore(a.scores).ge; valB = getPillarScore(b.scores).ge
+        valA = a.pillarScores.ge; valB = b.pillarScores.ge
         break
       case 'oe':
-        valA = getPillarScore(a.scores).oe; valB = getPillarScore(b.scores).oe
+        valA = a.pillarScores.oe; valB = b.pillarScores.oe
         break
-      case 'yearBuilt':
+      case 'year':
         valA = a.yearBuilt; valB = b.yearBuilt
         break
       case 'name':
@@ -91,6 +92,31 @@ const filteredHotels = computed(() => {
   })
 
   return list
+})
+
+// ItemList structured data for rich snippets
+useHead(() => {
+  if (filteredHotels.value.length === 0) return {}
+  return {
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Heritage Hotel Rankings',
+          description: "Southeast Asia's heritage hotels ranked by the Heritage Hotel Index",
+          numberOfItems: filteredHotels.value.length,
+          itemListElement: filteredHotels.value.slice(0, 20).map((hotel, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: hotel.name,
+            url: `${SITE_URL}/hotel/${hotel.slug}`,
+          })),
+        }),
+      },
+    ],
+  }
 })
 </script>
 

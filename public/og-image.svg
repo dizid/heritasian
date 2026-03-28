@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f0d0b"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#g1)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1200" y2="630">
+      <stop offset="0%" stop-color="#c9a96e" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#6b2d3e" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <text x="600" y="260" text-anchor="middle" fill="#c9a96e" font-family="serif" font-size="72" font-weight="bold" letter-spacing="12">HERITASIAN</text>
+  <line x1="400" y1="295" x2="800" y2="295" stroke="#c9a96e" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="600" y="340" text-anchor="middle" fill="#c4b9ab" font-family="sans-serif" font-size="24" letter-spacing="4">HERITAGE HOTEL INDEX</text>
+  <text x="600" y="400" text-anchor="middle" fill="#a89e90" font-family="sans-serif" font-size="18">Southeast Asia's Definitive Guide</text>
+</svg>

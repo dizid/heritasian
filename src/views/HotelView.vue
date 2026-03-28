@@ -55,6 +55,8 @@ useSeo(() => {
 })
 
 // Hotel structured data (LodgingBusiness)
+// Note: No aggregateRating — HHI is a proprietary index score, not user-aggregated reviews.
+// Google warns against using aggregateRating for proprietary ratings.
 useHead(() => {
   if (!hotel.value) return {}
   const h = hotel.value
@@ -76,13 +78,7 @@ useHead(() => {
             addressCountry: countryName,
           },
           foundingDate: String(h.yearBuilt),
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: h.hhi,
-            bestRating: 100,
-            worstRating: 0,
-            ratingCount: 1,
-          },
+          priceRange: h.priceRange,
         }),
       },
     ],
