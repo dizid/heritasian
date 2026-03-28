@@ -24,7 +24,6 @@ test.describe('Rankings page', () => {
 
   test('filter by tier landmark shows only top-tier hotels', async ({ page }) => {
     await page.locator('select').nth(1).selectOption('landmark')
-    // Verify filtered results — landmark means HHI >= 85, should show 3 hotels
     await expect(page.getByText(/Showing [1-5] heritage hotel/)).toBeVisible()
     await expect(page).toHaveURL(/tier=landmark/)
   })
@@ -41,9 +40,11 @@ test.describe('Rankings page', () => {
   })
 
   test('sort by year ascending shows oldest first', async ({ page }) => {
-    await page.locator('select').nth(3).selectOption('yearBuilt')
+    // Option value may be 'year' (new) or 'yearBuilt' (old deploy)
+    const sortSelect = page.locator('select').nth(3)
+    const hasYear = await sortSelect.locator('option[value="year"]').count()
+    await sortSelect.selectOption(hasYear > 0 ? 'year' : 'yearBuilt')
     await page.getByRole('button', { name: /Descending/i }).click()
-    // E&O Hotel (1885) should appear near the top
     await expect(page.getByText('E&O Hotel').first()).toBeVisible()
   })
 

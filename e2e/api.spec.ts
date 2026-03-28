@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test'
 
-const BASE = 'https://heritasian.netlify.app'
-
 test.describe('API contract', () => {
   test('GET /api/hotels returns 15 hotels with correct shape', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels`)
+    const res = await request.get(`/api/hotels`)
     expect(res.status()).toBe(200)
 
     const hotels = await res.json()
@@ -28,7 +26,7 @@ test.describe('API contract', () => {
   })
 
   test('hotels sorted by HHI desc by default', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels`)
+    const res = await request.get(`/api/hotels`)
     const hotels = await res.json()
 
     for (let i = 1; i < hotels.length; i++) {
@@ -37,14 +35,14 @@ test.describe('API contract', () => {
   })
 
   test('Raffles Hotel is ranked #1', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels`)
+    const res = await request.get(`/api/hotels`)
     const hotels = await res.json()
     expect(hotels[0].name).toBe('Raffles Hotel')
     expect(hotels[0].hhi).toBeGreaterThanOrEqual(90)
   })
 
   test('filter by country=SG returns only Singapore hotels', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels?country=SG`)
+    const res = await request.get(`/api/hotels?country=SG`)
     const hotels = await res.json()
 
     expect(hotels.length).toBeGreaterThanOrEqual(3)
@@ -54,7 +52,7 @@ test.describe('API contract', () => {
   })
 
   test('filter by tier=landmark returns only HHI >= 85', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels?tier=landmark`)
+    const res = await request.get(`/api/hotels?tier=landmark`)
     const hotels = await res.json()
 
     expect(hotels.length).toBeGreaterThanOrEqual(1)
@@ -64,7 +62,7 @@ test.describe('API contract', () => {
   })
 
   test('filter by price=$$$$ returns only luxury hotels', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels?price=$$$$`)
+    const res = await request.get(`/api/hotels?price=$$$$`)
     const hotels = await res.json()
 
     expect(hotels.length).toBeGreaterThanOrEqual(1)
@@ -74,7 +72,7 @@ test.describe('API contract', () => {
   })
 
   test('sort by name asc returns alphabetically', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels?sort=name&order=asc`)
+    const res = await request.get(`/api/hotels?sort=name&order=asc`)
     const hotels = await res.json()
 
     for (let i = 1; i < hotels.length; i++) {
@@ -83,7 +81,7 @@ test.describe('API contract', () => {
   })
 
   test('sort by year asc returns oldest first', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels?sort=year&order=asc`)
+    const res = await request.get(`/api/hotels?sort=year&order=asc`)
     const hotels = await res.json()
 
     for (let i = 1; i < hotels.length; i++) {
@@ -92,7 +90,7 @@ test.describe('API contract', () => {
   })
 
   test('GET /api/hotels/:slug returns single hotel with timeline', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels/raffles-hotel-singapore`)
+    const res = await request.get(`/api/hotels/raffles-hotel-singapore`)
     expect(res.status()).toBe(200)
 
     const hotel = await res.json()
@@ -105,12 +103,12 @@ test.describe('API contract', () => {
   })
 
   test('GET /api/hotels/nonexistent returns 404', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels/nonexistent-hotel-slug`)
+    const res = await request.get(`/api/hotels/nonexistent-hotel-slug`)
     expect(res.status()).toBe(404)
   })
 
   test('HHI scores match expected tier ranges', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels`)
+    const res = await request.get(`/api/hotels`)
     const hotels = await res.json()
 
     for (const h of hotels) {
@@ -122,7 +120,7 @@ test.describe('API contract', () => {
   })
 
   test('all 9 sub-scores are numbers between 0-100', async ({ request }) => {
-    const res = await request.get(`${BASE}/api/hotels`)
+    const res = await request.get(`/api/hotels`)
     const hotels = await res.json()
 
     for (const h of hotels) {
