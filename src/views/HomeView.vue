@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onServerPrefetch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { COUNTRIES } from '@/types'
 import HotelCard from '@/components/hotel/HotelCard.vue'
@@ -18,6 +18,7 @@ useSeo({
 
 const { hotels, loading, error, fetchHotels } = useHotels()
 
+onServerPrefetch(() => fetchHotels())
 onMounted(() => {
   fetchHotels()
 })

@@ -21,7 +21,7 @@ test.describe('Home page', () => {
 
   test('hero section shows heading and subtitle', async ({ page }) => {
     await expect(page.locator('h1')).toContainText('Heritage Hotels')
-    await expect(page.getByText('Independently rated')).toBeVisible()
+    await expect(page.getByText('Independently rated').first()).toBeVisible()
   })
 
   test('top 5 hotels are rendered', async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe('Home page', () => {
   })
 
   test('Read full methodology link works', async ({ page }) => {
-    await page.getByRole('link', { name: /methodology/i }).click()
+    await page.locator('main').getByRole('link', { name: /methodology/i }).first().click()
     await expect(page).toHaveURL(/\/methodology/)
   })
 })

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build && vite build --ssr src/entry-server.ts --outDir dist/server && node scripts/prerender.js",
+    "build:client": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -21,6 +22,7 @@
     "@playwright/test": "^1.58.2",
     "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^24.12.0",
+    "@unhead/ssr": "^2.1.12",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/tsconfig": "^0.9.0",
     "tailwindcss": "^4.2.1",

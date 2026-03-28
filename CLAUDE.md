@@ -12,13 +12,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` — Type-check with `vue-tsc` then build with Vite
 - `npm run preview` — Preview production build locally
 
-No test runner is configured yet.
+E2E tests use Playwright (`npx playwright test`). No unit test runner configured yet.
 
 ## Stack
 
 - **Frontend:** Vue 3 (`<script setup>`), TypeScript, Tailwind CSS 4 (`@theme {}` in `src/assets/main.css`), Vue Router, Chart.js via vue-chartjs
 - **Backend:** Single Netlify Function (`netlify/functions/api.ts`) using `@neondatabase/serverless`
-- **Database:** Neon PostgreSQL (tables: `hotels`, `timeline_events`)
+- **Database:** Neon PostgreSQL (tables: `hotels`, `timeline_events`, `countries`)
 - **SEO:** `@unhead/vue` for head management
 - **Deploy:** Netlify (config in `netlify.toml`)
 

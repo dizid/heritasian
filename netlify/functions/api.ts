@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless'
 import type { Handler, HandlerEvent, HandlerResponse } from '@netlify/functions'
+import { HHI_SQL, transformHotel } from '../../src/data/db'
 
 // CORS headers for local dev and production
 const CORS_HEADERS = {
@@ -22,89 +23,6 @@ function err(statusCode: number, message: string): HandlerResponse {
     statusCode,
     headers: CORS_HEADERS,
     body: JSON.stringify({ error: message }),
-  }
-}
-
-// HHI SQL expression — computed in-database so we can sort and filter on it
-const HHI_SQL = `
-  ROUND((
-    (score_historical_significance * 0.15 + score_architectural_integrity * 0.15 + score_cultural_immersion * 0.10)
-    + (score_authentic_experience * 0.15 + score_reputation * 0.12 + score_service_quality * 0.08)
-    + (score_conservation * 0.10 + score_modern_comforts * 0.08 + score_value * 0.07)
-  )::numeric, 2) AS hhi
-`
-
-// Tier derived from HHI score
-function deriveTier(hhi: number): 'landmark' | 'distinguished' | 'notable' | 'emerging' {
-  if (hhi >= 85) return 'landmark'
-  if (hhi >= 70) return 'distinguished'
-  if (hhi >= 55) return 'notable'
-  return 'emerging'
-}
-
-// Pillar scores (0-100 scale)
-function derivePillarScores(row: Record<string, number>) {
-  const ha = Math.round(
-    ((row.score_historical_significance * 15 +
-      row.score_architectural_integrity * 15 +
-      row.score_cultural_immersion * 10) / 40) * 10
-  ) / 10
-
-  const ge = Math.round(
-    ((row.score_authentic_experience * 15 +
-      row.score_reputation * 12 +
-      row.score_service_quality * 8) / 35) * 10
-  ) / 10
-
-  const oe = Math.round(
-    ((row.score_conservation * 10 +
-      row.score_modern_comforts * 8 +
-      row.score_value * 7) / 25) * 10
-  ) / 10
-
-  return { ha, ge, oe }
-}
-
-// Transform a flat DB row into the Hotel interface shape
-function transformHotel(row: Record<string, unknown>) {
-  const hhi = Number(row.hhi)
-  const pillarScores = derivePillarScores(row as Record<string, number>)
-
-  return {
-    id: row.id as string,
-    slug: row.slug as string,
-    name: row.name as string,
-    country: row.country_code as string,
-    city: row.city as string,
-    yearBuilt: row.year_built as number,
-    originalPurpose: row.original_purpose as string,
-    architecturalStyle: row.architectural_style as string,
-    description: row.description as string,
-    highlights: row.highlights as string[],
-    imageUrl: row.image_url as string,
-    websiteUrl: row.website_url as string,
-    priceRange: row.price_range as string,
-    scores: {
-      heritageAuthenticity: {
-        historicalSignificance: row.score_historical_significance as number,
-        architecturalIntegrity: row.score_architectural_integrity as number,
-        culturalImmersion: row.score_cultural_immersion as number,
-      },
-      guestExperience: {
-        authenticExperience: row.score_authentic_experience as number,
-        reputationScore: row.score_reputation as number,
-        serviceQuality: row.score_service_quality as number,
-      },
-      operationalExcellence: {
-        conservationCommitment: row.score_conservation as number,
-        modernComforts: row.score_modern_comforts as number,
-        valuePositioning: row.score_value as number,
-      },
-    },
-    hhi,
-    tier: deriveTier(hhi),
-    pillarScores,
-    timeline: (row.timeline as Array<{ year: number; event: string }>) ?? [],
   }
 }
 

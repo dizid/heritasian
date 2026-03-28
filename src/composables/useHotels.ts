@@ -48,6 +48,13 @@ export function useHotels() {
     error.value = null
 
     try {
+      // During SSR: query Neon DB directly (API server not available)
+      if (import.meta.env.SSR) {
+        const { fetchAllHotels } = await import('@/data/db')
+        hotels.value = await fetchAllHotels(process.env.DATABASE_URL!)
+        return
+      }
+
       const qs = buildQueryString(filters)
       const response = await fetch(`${API_BASE}/hotels${qs}`)
 
@@ -67,6 +74,12 @@ export function useHotels() {
 
   async function getHotelBySlug(slug: string): Promise<Hotel | null> {
     try {
+      // During SSR: query Neon DB directly (API server not available)
+      if (import.meta.env.SSR) {
+        const { fetchHotelBySlug } = await import('@/data/db')
+        return fetchHotelBySlug(process.env.DATABASE_URL!, slug)
+      }
+
       const response = await fetch(`${API_BASE}/hotels/${encodeURIComponent(slug)}`)
 
       if (response.status === 404) return null

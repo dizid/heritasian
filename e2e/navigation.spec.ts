@@ -72,12 +72,10 @@ test.describe('Full user journey', () => {
 
     await page.getByRole('link', { name: 'Explore Rankings' }).click()
     await expect(page).toHaveURL('/rankings')
-    await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
+    await expect(page.getByText('Showing').first()).toBeVisible()
 
     await page.getByText('Raffles Hotel').first().click()
     await expect(page).toHaveURL(/\/hotel\/raffles/)
-    await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
-
     await expect(page.locator('h1')).toContainText('Raffles Hotel')
 
     await page.getByRole('link', { name: /Back to Rankings/i }).first().click()
@@ -92,7 +90,6 @@ test.describe('Full user journey', () => {
     await countrySection.getByText('Thailand').click()
     await expect(page).toHaveURL(/\/rankings\?country=TH/)
 
-    await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
     await expect(page.getByText('Showing 2 heritage hotels')).toBeVisible()
   })
 })

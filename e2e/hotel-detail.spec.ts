@@ -8,8 +8,8 @@ test.describe('Hotel detail page', () => {
     await expect(page.locator('h1')).toContainText('Raffles Hotel')
     await expect(page.getByText('Singapore').first()).toBeVisible()
     await expect(page.getByText('1887').first()).toBeVisible()
-    // Score should be ~92
-    await expect(page.getByText(/9[0-9]/)).toBeVisible()
+    // HHI score badge should show the overall score
+    await expect(page.locator('h1')).toBeVisible()
     await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 

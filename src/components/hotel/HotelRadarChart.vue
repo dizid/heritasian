@@ -15,6 +15,8 @@ import { getPillarScore } from '@/types'
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
+const isSSR = import.meta.env.SSR
+
 const props = defineProps<{
   scores: HHIScores
 }>()
@@ -84,6 +86,8 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="w-full max-w-xs mx-auto">
-    <Radar :data="chartData" :options="chartOptions" />
+    <!-- Chart.js requires Canvas API — skip during SSR -->
+    <Radar v-if="!isSSR" :data="chartData" :options="chartOptions" />
+    <div v-else class="h-48 bg-heritage-surface rounded animate-pulse" />
   </div>
 </template>

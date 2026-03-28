@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onServerPrefetch } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { COUNTRIES } from '@/types'
 import { useHotels } from '@/composables/useHotels'
@@ -19,6 +19,12 @@ const { getHotelBySlug } = useHotels()
 const hotel = ref<Awaited<ReturnType<typeof getHotelBySlug>>>(null)
 const loading = ref(true)
 const notFound = ref(false)
+
+onServerPrefetch(async () => {
+  hotel.value = await getHotelBySlug(slug.value)
+  if (!hotel.value) notFound.value = true
+  loading.value = false
+})
 
 onMounted(async () => {
   try {

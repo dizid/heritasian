@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, onServerPrefetch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { CountryCode, Tier, PriceRange } from '@/types'
 import { getPillarScore } from '@/types'
@@ -41,6 +41,7 @@ watch(filters, (f) => {
   })
 }, { deep: true })
 
+onServerPrefetch(() => fetchHotels())
 onMounted(() => {
   fetchHotels()
 })
