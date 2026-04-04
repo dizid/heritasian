@@ -68,6 +68,7 @@ async function prerender() {
   // Build the full route list
   const routes = [
     '/',
+    '/hotels',
     '/rankings',
     '/methodology',
     ...slugs.map(s => `/hotel/${s}`),

@@ -156,6 +156,7 @@ async function handleSitemap(sql: ReturnType<typeof neon>): Promise<HandlerRespo
 
   const staticPages = [
     { loc: '/', priority: '1.0', changefreq: 'weekly' },
+    { loc: '/hotels', priority: '0.85', changefreq: 'weekly' },
     { loc: '/rankings', priority: '0.9', changefreq: 'weekly' },
     { loc: '/methodology', priority: '0.6', changefreq: 'monthly' },
   ]

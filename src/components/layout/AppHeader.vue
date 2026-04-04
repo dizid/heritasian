@@ -7,6 +7,7 @@ const mobileMenuOpen = ref(false)
 
 const navLinks = [
   { name: 'Home', to: '/' },
+  { name: 'Hotels', to: '/hotels' },
   { name: 'Rankings', to: '/rankings' },
   { name: 'Methodology', to: '/methodology' },
 ]

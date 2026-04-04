@@ -72,15 +72,15 @@ const priceOptions: Array<{ value: PriceRange; label: string }> = [
 ]
 
 const selectClass =
-  'glass-light rounded-lg px-3 py-2 text-sm text-heritage-text bg-heritage-surface border border-heritage-border focus:outline-none focus:border-heritage-gold transition-colors duration-200 cursor-pointer appearance-none pr-8'
+  'w-full glass-light rounded-lg px-3 py-2 text-sm text-heritage-text bg-heritage-surface border border-heritage-border focus:outline-none focus:border-heritage-gold transition-colors duration-200 cursor-pointer appearance-none pr-8'
 </script>
 
 <template>
-  <div class="glass rounded-xl p-4 border-heritage-border">
-    <div class="flex flex-wrap gap-3 items-end">
+  <div class="glass rounded-xl p-3 sm:p-4 border-heritage-border">
+    <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 items-end">
       <!-- Country -->
       <div class="relative">
-        <label for="filter-country" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-country" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1">
           Country
         </label>
         <select
@@ -103,7 +103,7 @@ const selectClass =
 
       <!-- Tier -->
       <div class="relative">
-        <label for="filter-tier" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-tier" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1">
           Tier
         </label>
         <select
@@ -126,7 +126,7 @@ const selectClass =
 
       <!-- Price Range -->
       <div class="relative">
-        <label for="filter-price" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-price" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1">
           Price
         </label>
         <select
@@ -149,7 +149,7 @@ const selectClass =
 
       <!-- Sort -->
       <div class="relative">
-        <label for="filter-sort" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5">
+        <label for="filter-sort" class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1">
           Sort By
         </label>
         <select
@@ -170,8 +170,8 @@ const selectClass =
       </div>
 
       <!-- Order toggle -->
-      <div>
-        <span class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1.5" aria-hidden="true">
+      <div class="col-span-1">
+        <span class="block text-[10px] text-heritage-text-secondary uppercase tracking-widest mb-1" aria-hidden="true">
           Order
         </span>
         <button
@@ -186,7 +186,7 @@ const selectClass =
       <!-- Clear filters -->
       <button
         v-if="hasActiveFilters"
-        class="ml-auto px-4 py-2 text-xs text-heritage-text-secondary hover:text-heritage-gold border border-heritage-border hover:border-heritage-gold/30 rounded-lg transition-colors duration-200"
+        class="col-span-1 sm:ml-auto px-4 py-2 text-xs text-heritage-text-secondary hover:text-heritage-gold border border-heritage-border hover:border-heritage-gold/30 rounded-lg transition-colors duration-200"
         @click="clearFilters"
       >
         Clear filters
