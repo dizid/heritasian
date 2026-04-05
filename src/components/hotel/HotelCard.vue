@@ -57,11 +57,16 @@ const tierConfig = computed(() => TIER_CONFIG[props.hotel.tier])
           </div>
 
           <img
+            v-if="hotel.imageUrl"
             :src="hotel.imageUrl"
             :alt="hotel.name"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            @error="(e: Event) => (e.target as HTMLImageElement).style.display = 'none'"
           />
+          <div v-else class="w-full h-full bg-gradient-to-br from-heritage-surface-light to-heritage-dark flex items-center justify-center">
+            <span class="font-heading text-heritage-text-secondary/40 text-sm text-center px-4">{{ hotel.name }}</span>
+          </div>
           <div class="absolute inset-0 bg-gradient-to-t from-heritage-dark/60 to-transparent" />
         </div>
 

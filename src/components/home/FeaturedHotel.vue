@@ -51,11 +51,16 @@ const excerpt = computed(() => {
       <!-- Image -->
       <div class="relative md:w-[60%] h-56 md:h-80 overflow-hidden">
         <img
+          v-if="hotel.imageUrl"
           :src="hotel.imageUrl"
           :alt="hotel.name"
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           loading="lazy"
+          @error="(e: Event) => (e.target as HTMLImageElement).style.display = 'none'"
         />
+        <div v-else class="w-full h-full bg-gradient-to-br from-heritage-surface-light to-heritage-dark flex items-center justify-center">
+          <span class="font-heading text-heritage-text-secondary/30 text-lg text-center px-6">{{ hotel.name }}</span>
+        </div>
         <div class="absolute inset-0 bg-gradient-to-r from-heritage-dark/80 via-heritage-dark/30 to-transparent" />
         <!-- Label -->
         <div class="absolute top-4 left-4 glass-light rounded-lg px-3 py-1.5">

@@ -151,10 +151,13 @@ const scoreGroups = computed(() => {
     <!-- Hero Banner -->
     <div class="relative h-[55vh] min-h-[380px] overflow-hidden">
       <img
+        v-if="hotel.imageUrl"
         :src="hotel.imageUrl"
         :alt="hotel.name"
         class="w-full h-full object-cover"
+        @error="(e: Event) => (e.target as HTMLImageElement).style.display = 'none'"
       />
+      <div v-else class="w-full h-full bg-gradient-to-br from-heritage-surface-light via-heritage-dark/80 to-heritage-dark" />
       <!-- Gradient overlays -->
       <div class="absolute inset-0 bg-gradient-to-t from-heritage-dark via-heritage-dark/50 to-heritage-dark/20" />
       <div class="absolute inset-0 bg-gradient-to-r from-heritage-dark/40 to-transparent" />
