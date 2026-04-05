@@ -27,6 +27,12 @@ const year = new Date().getFullYear()
             Home
           </RouterLink>
           <RouterLink
+            to="/hotels"
+            class="text-heritage-text-secondary hover:text-heritage-gold text-xs transition-colors duration-200"
+          >
+            Hotels
+          </RouterLink>
+          <RouterLink
             to="/rankings"
             class="text-heritage-text-secondary hover:text-heritage-gold text-xs transition-colors duration-200"
           >
