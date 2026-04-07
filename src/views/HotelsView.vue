@@ -185,7 +185,7 @@ const showLegend = ref(false)
         <table class="w-full text-xs">
           <!-- Column group headers -->
           <thead>
-            <tr class="border-b border-heritage-border">
+            <tr class="hidden md:table-row border-b border-heritage-border">
               <th colspan="3" class="px-2 py-1.5" />
               <th colspan="4" class="px-2 py-1.5 text-center text-[10px] font-normal uppercase tracking-widest" style="color: #c9a96e">Heritage &amp; Auth. (40%)</th>
               <th colspan="4" class="px-2 py-1.5 text-center text-[10px] font-normal uppercase tracking-widest" style="color: #b5c1ad">Guest Exp. (35%)</th>
@@ -206,7 +206,8 @@ const showLegend = ref(false)
                 class="px-2 py-2 text-right text-[10px] uppercase tracking-widest cursor-pointer select-none whitespace-nowrap"
                 :class="[
                   sortKey === col.key ? 'text-heritage-gold' : 'text-heritage-text-secondary',
-                  col.key === 'ha' || col.key === 'ge' || col.key === 'oe' || col.key === 'hhi' ? 'font-semibold' : 'font-normal'
+                  col.key === 'ha' || col.key === 'ge' || col.key === 'oe' || col.key === 'hhi' ? 'font-semibold' : 'font-normal',
+                  col.key !== 'hhi' ? 'hidden md:table-cell' : ''
                 ]"
                 :title="col.title"
                 @click="toggleSort(col.key)"
@@ -214,7 +215,7 @@ const showLegend = ref(false)
                 {{ col.label }}
                 <span v-if="sortKey === col.key">{{ sortDir === 'asc' ? '↑' : '↓' }}</span>
               </th>
-              <th class="px-2 py-2 text-right text-[10px] text-heritage-text-secondary uppercase tracking-widest">Tier</th>
+              <th class="hidden md:table-cell px-2 py-2 text-right text-[10px] text-heritage-text-secondary uppercase tracking-widest">Tier</th>
             </tr>
           </thead>
 
@@ -249,58 +250,58 @@ const showLegend = ref(false)
               </td>
 
               <!-- H&A pillar -->
-              <td class="px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.ha) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.ha) }">
                 {{ hotel.pillarScores.ha.toFixed(1) }}
               </td>
               <!-- HS -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.historicalSignificance) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.historicalSignificance) }">
                 {{ hotel.scores.heritageAuthenticity.historicalSignificance }}
               </td>
               <!-- AI -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.architecturalIntegrity) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.architecturalIntegrity) }">
                 {{ hotel.scores.heritageAuthenticity.architecturalIntegrity }}
               </td>
               <!-- CI -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.culturalImmersion) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.heritageAuthenticity.culturalImmersion) }">
                 {{ hotel.scores.heritageAuthenticity.culturalImmersion }}
               </td>
 
               <!-- GE pillar -->
-              <td class="px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.ge) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.ge) }">
                 {{ hotel.pillarScores.ge.toFixed(1) }}
               </td>
               <!-- AE -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.authenticExperience) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.authenticExperience) }">
                 {{ hotel.scores.guestExperience.authenticExperience }}
               </td>
               <!-- RS -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.reputationScore) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.reputationScore) }">
                 {{ hotel.scores.guestExperience.reputationScore }}
               </td>
               <!-- SQ -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.serviceQuality) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.guestExperience.serviceQuality) }">
                 {{ hotel.scores.guestExperience.serviceQuality }}
               </td>
 
               <!-- OE pillar -->
-              <td class="px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.oe) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums font-semibold" :style="{ color: scoreColor(hotel.pillarScores.oe) }">
                 {{ hotel.pillarScores.oe.toFixed(1) }}
               </td>
               <!-- CC -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.conservationCommitment) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.conservationCommitment) }">
                 {{ hotel.scores.operationalExcellence.conservationCommitment }}
               </td>
               <!-- MC -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.modernComforts) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.modernComforts) }">
                 {{ hotel.scores.operationalExcellence.modernComforts }}
               </td>
               <!-- VP -->
-              <td class="px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.valuePositioning) }">
+              <td class="hidden md:table-cell px-2 py-2 text-right tabular-nums" :style="{ color: scoreColor(hotel.scores.operationalExcellence.valuePositioning) }">
                 {{ hotel.scores.operationalExcellence.valuePositioning }}
               </td>
 
               <!-- Tier -->
-              <td class="px-2 py-2 text-right text-[10px] font-medium uppercase tracking-wide whitespace-nowrap"
+              <td class="hidden md:table-cell px-2 py-2 text-right text-[10px] font-medium uppercase tracking-wide whitespace-nowrap"
                 :style="{ color: TIER_CONFIG[hotel.tier].color }">
                 {{ hotel.tier }}
               </td>
