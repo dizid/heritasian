@@ -60,15 +60,6 @@ test.describe('Accessibility — ARIA attributes', () => {
     await expect(page.getByText('No hotels match')).toBeVisible()
   })
 
-  test('radar chart container has accessible role', async ({ page }) => {
-    await page.goto('/hotel/raffles-hotel-singapore')
-    await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
-
-    const hasRoleImg = await page.evaluate(() => {
-      return !!document.querySelector('[role="img"]')
-    })
-    expect(hasRoleImg).toBe(true)
-  })
 })
 
 test.describe('Accessibility — images', () => {

@@ -6,7 +6,6 @@ import { useHotels } from '@/composables/useHotels'
 import TierBadge from '@/components/shared/TierBadge.vue'
 import ScoreBar from '@/components/shared/ScoreBar.vue'
 import HotelScoreBadge from '@/components/hotel/HotelScoreBadge.vue'
-import HotelRadarChart from '@/components/hotel/HotelRadarChart.vue'
 import HotelTimeline from '@/components/hotel/HotelTimeline.vue'
 import { useHead } from '@unhead/vue'
 import { useSeo } from '@/composables/useSeo'
@@ -189,20 +188,9 @@ const scoreGroups = computed(() => {
     <div class="max-w-7xl mx-auto px-4 py-10">
       <!-- Score section -->
       <div class="glass rounded-2xl p-6 md:p-8 border-heritage-border mb-10">
-        <div class="flex flex-col md:flex-row items-center gap-8">
-          <!-- Score badge -->
-          <div class="shrink-0 flex flex-col items-center gap-4">
-            <HotelScoreBadge :score="hotel.hhi" :tier="hotel.tier" size="lg" />
-            <TierBadge :tier="hotel.tier" size="md" />
-          </div>
-
-          <!-- Divider -->
-          <div class="hidden md:block w-px h-40 bg-heritage-border" />
-
-          <!-- Radar chart -->
-          <div class="flex-1 w-full max-w-xs mx-auto md:max-w-none">
-            <HotelRadarChart :scores="hotel.scores" />
-          </div>
+        <div class="flex flex-col items-center gap-4">
+          <HotelScoreBadge :score="hotel.hhi" :tier="hotel.tier" size="lg" />
+          <TierBadge :tier="hotel.tier" size="md" />
         </div>
       </div>
 

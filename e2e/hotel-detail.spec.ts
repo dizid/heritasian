@@ -13,12 +13,6 @@ test.describe('Hotel detail page', () => {
     await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 
-  test('radar chart canvas is rendered', async ({ page }) => {
-    await page.goto('/hotel/raffles-hotel-singapore')
-    await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
-    await expect(page.locator('canvas')).toBeVisible()
-  })
-
   test('9 score bars are visible (3 pillars x 3 sub-scores)', async ({ page }) => {
     await page.goto('/hotel/raffles-hotel-singapore')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
