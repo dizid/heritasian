@@ -34,6 +34,7 @@ export interface Hotel {
   yearBuilt: number
   originalPurpose: string
   architecturalStyle: string
+  tagline: string
   description: string
   highlights: string[]
   imageUrl: string

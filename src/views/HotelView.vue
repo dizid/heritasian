@@ -4,7 +4,6 @@ import { useRoute, RouterLink } from 'vue-router'
 import { COUNTRIES } from '@/types'
 import { useHotels } from '@/composables/useHotels'
 import TierBadge from '@/components/shared/TierBadge.vue'
-import ScoreBar from '@/components/shared/ScoreBar.vue'
 import HotelScoreBadge from '@/components/hotel/HotelScoreBadge.vue'
 import HotelTimeline from '@/components/hotel/HotelTimeline.vue'
 import { useHead } from '@unhead/vue'
@@ -84,39 +83,6 @@ useHead(() => {
   }
 })
 
-const scoreGroups = computed(() => {
-  if (!hotel.value) return []
-  const s = hotel.value.scores
-  return [
-    {
-      pillar: 'Heritage & Authenticity',
-      color: '#c9a96e',
-      items: [
-        { label: 'Historical Significance', score: s.heritageAuthenticity.historicalSignificance },
-        { label: 'Architectural Integrity', score: s.heritageAuthenticity.architecturalIntegrity },
-        { label: 'Cultural Immersion', score: s.heritageAuthenticity.culturalImmersion },
-      ],
-    },
-    {
-      pillar: 'Guest Experience',
-      color: '#a8b4a0',
-      items: [
-        { label: 'Authentic Experience', score: s.guestExperience.authenticExperience },
-        { label: 'Reputation Score', score: s.guestExperience.reputationScore },
-        { label: 'Service Quality', score: s.guestExperience.serviceQuality },
-      ],
-    },
-    {
-      pillar: 'Operational Excellence',
-      color: '#8b9fc5',
-      items: [
-        { label: 'Conservation Commitment', score: s.operationalExcellence.conservationCommitment },
-        { label: 'Modern Comforts', score: s.operationalExcellence.modernComforts },
-        { label: 'Value Positioning', score: s.operationalExcellence.valuePositioning },
-      ],
-    },
-  ]
-})
 </script>
 
 <template>
@@ -172,6 +138,12 @@ const scoreGroups = computed(() => {
         <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-heritage-text mb-2 leading-tight">
           {{ hotel.name }}
         </h1>
+        <p
+          v-if="hotel.tagline"
+          class="font-heading italic text-heritage-gold/90 text-base sm:text-lg md:text-xl leading-snug mb-3 max-w-2xl"
+        >
+          {{ hotel.tagline }}
+        </p>
         <div class="flex flex-wrap items-center gap-3 text-sm text-heritage-text-secondary">
           <span v-if="country">{{ country.flag }} {{ hotel.city }}, {{ country.name }}</span>
           <span class="text-heritage-border">·</span>
@@ -191,31 +163,6 @@ const scoreGroups = computed(() => {
         <div class="flex flex-col items-center gap-4">
           <HotelScoreBadge :score="hotel.hhi" :tier="hotel.tier" size="lg" />
           <TierBadge :tier="hotel.tier" size="md" />
-        </div>
-      </div>
-
-      <!-- Score breakdown -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div
-          v-for="group in scoreGroups"
-          :key="group.pillar"
-          class="glass rounded-xl p-6 border-heritage-border"
-        >
-          <h3
-            class="font-heading text-base font-semibold mb-4 pb-3 border-b border-heritage-border"
-            :style="{ color: group.color }"
-          >
-            {{ group.pillar }}
-          </h3>
-          <div class="flex flex-col gap-4">
-            <ScoreBar
-              v-for="item in group.items"
-              :key="item.label"
-              :label="item.label"
-              :score="item.score"
-              :color="group.color"
-            />
-          </div>
         </div>
       </div>
 

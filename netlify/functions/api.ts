@@ -96,7 +96,7 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
     WITH scored AS (
       SELECT
         id, slug, name, country_code, city, year_built, original_purpose,
-        architectural_style, description, highlights, image_url, website_url,
+        architectural_style, tagline, description, highlights, image_url, website_url,
         price_range,
         score_historical_significance, score_architectural_integrity, score_cultural_immersion,
         score_authentic_experience, score_reputation, score_service_quality,

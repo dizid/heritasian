@@ -55,6 +55,7 @@ export function transformHotel(row: Record<string, unknown>): Hotel {
     yearBuilt: row.year_built as number,
     originalPurpose: row.original_purpose as string,
     architecturalStyle: row.architectural_style as string,
+    tagline: (row.tagline as string | null) ?? '',
     description: row.description as string,
     highlights: row.highlights as string[],
     imageUrl: row.image_url as string,
@@ -91,7 +92,7 @@ export async function fetchAllHotels(connectionString: string): Promise<Hotel[]>
     WITH scored AS (
       SELECT
         id, slug, name, country_code, city, year_built, original_purpose,
-        architectural_style, description, highlights, image_url, website_url,
+        architectural_style, tagline, description, highlights, image_url, website_url,
         price_range,
         score_historical_significance, score_architectural_integrity, score_cultural_immersion,
         score_authentic_experience, score_reputation, score_service_quality,
