@@ -1,6 +1,10 @@
 # Heritage Tiers
 
-Every hotel in Heritasian receives a **Heritasian Heritage Index (HHI)** score from 0–100. That score maps to one of four tiers.
+> **Methodology version:** v1.0 &nbsp;·&nbsp; **As of:** 2026-04-09 &nbsp;·&nbsp; **Framework:** [ICOMOS Nara Document on Authenticity (1994)](https://www.icomos.org/en/charters-and-texts/179-articles-en-francais/ressources/charters-and-standards/386-the-nara-document-on-authenticity-1994)
+
+Every hotel in the Heritasian index receives a **Heritage Hotel Index (HHI)** score from 0–100. That score maps to one of four tiers.
+
+The HHI operationalises the six authenticity dimensions of the ICOMOS Nara Document — the international reference framework used by UNESCO for World Heritage evaluation — into nine measurable sub-metrics. Full mapping is on the [methodology page](/methodology).
 
 ## Tiers
 
@@ -35,7 +39,13 @@ Each sub-metric is multiplied by its weight, the nine terms are summed, and the 
 
 ## Where this lives in code
 
-The formula is mirrored in two places and **must stay in sync**:
+The formula is currently mirrored in two places and **must stay in sync** (this will be fixed in Phase 1 by moving the formula into a Postgres view — see `drizzle/0001_evidence_layer.sql`):
 
 - **Client-side:** `calculateHHI()` and `getTier()` in [src/types/index.ts](src/types/index.ts)
 - **Server-side:** `HHI_SQL` expression in [src/data/db.ts](src/data/db.ts), used by [netlify/functions/api.ts](netlify/functions/api.ts)
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
+| v1.0 | 2026-04-09 | Initial public methodology. Anchored to ICOMOS Nara framework. Reputation-score aggregation claim (Google / TripAdvisor / Booking.com) removed pending v2 implementation. |

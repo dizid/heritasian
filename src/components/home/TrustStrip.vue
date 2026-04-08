@@ -2,7 +2,7 @@
 const signals = [
   { icon: '🛡️', label: 'Independent Ratings', desc: 'No hotel pays for inclusion or ranking' },
   { icon: '📊', label: '9 Scoring Dimensions', desc: 'Rigorous multi-pillar evaluation' },
-  { icon: '🔍', label: '5 Data Sources', desc: 'Google, TripAdvisor, Booking & more' },
+  { icon: '📖', label: 'ICOMOS Nara Anchored', desc: 'Operationalises the 1994 international authenticity framework' },
   { icon: '🔄', label: 'Updated Quarterly', desc: 'Living index, not a static list' },
 ]
 </script>

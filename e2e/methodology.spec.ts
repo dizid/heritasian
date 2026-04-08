@@ -42,13 +42,28 @@ test.describe('Methodology page', () => {
     await expect(page.getByText('Heritage Emerging').first()).toBeVisible()
   })
 
-  test('data sources section with 5 sources', async ({ page }) => {
+  test('data sources section lists ICOMOS Nara, Heritage Registries, Expert Assessment, Google Reviews', async ({ page }) => {
     await expect(page.getByText('Data Sources')).toBeVisible()
-    await expect(page.getByText('Google Reviews').first()).toBeVisible()
-    await expect(page.getByText('TripAdvisor').first()).toBeVisible()
-    await expect(page.getByText('Booking.com').first()).toBeVisible()
+    await expect(page.getByText('ICOMOS Nara Framework').first()).toBeVisible()
     await expect(page.getByText('Heritage Registries').first()).toBeVisible()
     await expect(page.getByText('Expert Assessment').first()).toBeVisible()
+    await expect(page.getByText('Google Reviews').first()).toBeVisible()
+  })
+
+  test('data sources section does NOT claim TripAdvisor or Booking.com aggregation', async ({ page }) => {
+    // Phase 0 credibility fix (2026-04-09): the previous v1 methodology advertised
+    // aggregation from TripAdvisor and Booking.com that the code never actually implemented.
+    // Those claims were removed. The dataSources cards must not show them as sources.
+    const dataSourcesSection = page.locator('section, div').filter({ hasText: 'Data Sources' }).first()
+    await expect(dataSourcesSection.getByText('TripAdvisor', { exact: true })).toHaveCount(0)
+    await expect(dataSourcesSection.getByText('Booking.com', { exact: true })).toHaveCount(0)
+  })
+
+  test('ICOMOS Nara anchor section is visible with live link', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /Anchored in the ICOMOS Nara Framework/i })).toBeVisible()
+    const naraLink = page.getByRole('link', { name: /ICOMOS Nara Document on Authenticity/i })
+    await expect(naraLink).toBeVisible()
+    await expect(naraLink).toHaveAttribute('href', /icomos\.org/)
   })
 
   test('transparency/independence note', async ({ page }) => {

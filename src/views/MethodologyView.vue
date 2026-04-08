@@ -52,7 +52,7 @@ const pillars = [
       {
         name: 'Reputation Score',
         weight: '12%',
-        desc: 'Aggregated guest ratings from Google, TripAdvisor, and Booking.com, weighted for review volume and recency.',
+        desc: 'Editorial review of public guest-rating signals, primarily Google Reviews. Automated aggregation via the Google Places API lands in our v2 release. TripAdvisor and Booking.com are not publicly available for reuse and are not cited as sources.',
       },
       {
         name: 'Service Quality',
@@ -95,11 +95,10 @@ const tiers = Object.entries(TIER_CONFIG).map(([key, val]) => ({
 }))
 
 const dataSources = [
-  { name: 'Google Reviews', icon: '⭐', desc: 'Aggregated guest ratings and review analysis' },
-  { name: 'TripAdvisor', icon: '🦉', desc: 'Traveller opinions and property rankings' },
-  { name: 'Booking.com', icon: '🏨', desc: 'Guest scores and accommodation data' },
-  { name: 'Heritage Registries', icon: '📜', desc: 'UNESCO, national and local heritage lists' },
-  { name: 'Expert Assessment', icon: '🔍', desc: 'On-site evaluation and editorial research' },
+  { name: 'ICOMOS Nara Framework', icon: '📖', desc: 'The 1994 international standard for cultural heritage authenticity — every HHI sub-metric is mapped to one of Nara\'s six authenticity dimensions.' },
+  { name: 'Heritage Registries', icon: '📜', desc: 'UNESCO World Heritage list plus national and regional heritage registers.' },
+  { name: 'Expert Assessment', icon: '🔍', desc: 'On-site evaluation and editorial research, with every score citing the specific source used.' },
+  { name: 'Google Reviews', icon: '⭐', desc: 'Editorial review today, Google Places API aggregation planned for v2.' },
 ]
 </script>
 
@@ -207,6 +206,69 @@ const dataSources = [
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ICOMOS Nara anchor -->
+      <div class="glass rounded-2xl p-8 border-heritage-border mb-16">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-2xl">📖</span>
+          <h2 class="font-heading text-2xl font-bold text-heritage-text">
+            Anchored in the ICOMOS Nara Framework
+          </h2>
+        </div>
+        <div class="flex flex-col gap-3 text-heritage-text-secondary text-sm leading-relaxed">
+          <p>
+            The HHI is not an invented framework. Our nine sub-metrics operationalise the six
+            authenticity dimensions defined in the
+            <a
+              href="https://www.icomos.org/en/charters-and-texts/179-articles-en-francais/ressources/charters-and-standards/386-the-nara-document-on-authenticity-1994"
+              target="_blank"
+              rel="noopener"
+              class="text-heritage-gold underline"
+            >
+              ICOMOS Nara Document on Authenticity (1994)
+            </a>,
+            the foundational international standard for assessing cultural heritage authenticity
+            and the reference framework used by UNESCO for World Heritage evaluation.
+          </p>
+          <p>
+            The six Nara dimensions map directly onto the HHI sub-scores:
+          </p>
+          <ul class="flex flex-col gap-1.5 pl-2 mt-1">
+            <li>
+              <span class="text-heritage-gold">›</span>
+              <strong class="text-heritage-text">Form &amp; design</strong> +
+              <strong class="text-heritage-text">materials &amp; substance</strong>
+              → Architectural Integrity
+            </li>
+            <li>
+              <span class="text-heritage-gold">›</span>
+              <strong class="text-heritage-text">Location &amp; setting</strong>
+              → Historical Significance
+            </li>
+            <li>
+              <span class="text-heritage-gold">›</span>
+              <strong class="text-heritage-text">Traditions &amp; techniques</strong>
+              → Cultural Immersion
+            </li>
+            <li>
+              <span class="text-heritage-gold">›</span>
+              <strong class="text-heritage-text">Spirit &amp; feeling</strong>
+              → Authentic Experience
+            </li>
+            <li>
+              <span class="text-heritage-gold">›</span>
+              <strong class="text-heritage-text">Use &amp; function</strong>
+              → Conservation Commitment
+            </li>
+          </ul>
+          <p class="mt-2">
+            This mapping means every HHI score can be traced back to an established, internationally
+            recognised framework — not an opaque editorial judgment. It is also the reason the HHI
+            applies identically to a 1887 Penang shophouse, a Lisbon convent, and a Moroccan riad:
+            the Nara Document was explicitly written to be culturally neutral.
+          </p>
         </div>
       </div>
 
