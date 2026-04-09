@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Hotel } from '@/types'
-import { getTier, TIER_CONFIG } from '@/types'
+import { TIER_CONFIG } from '@/types'
 import TierBadge from '@/components/shared/TierBadge.vue'
 
 const props = defineProps<{
@@ -10,7 +10,7 @@ const props = defineProps<{
   loading: boolean
 }>()
 
-const tier = computed(() => props.hotel ? getTier(props.hotel.hhi) : null)
+const tier = computed(() => props.hotel?.tier ?? null)
 const tierColor = computed(() => tier.value ? TIER_CONFIG[tier.value].color : '#c9a96e')
 const excerpt = computed(() => {
   if (!props.hotel?.description) return ''

@@ -1,5 +1,5 @@
-import type { Tier, HHIScores } from '../types/index'
-import { TIER_CONFIG, getPillarScore } from '../types/index'
+import type { Tier } from '../types/index'
+import { TIER_CONFIG } from '../types/index'
 
 export function useScores() {
   /**
@@ -18,14 +18,6 @@ export function useScores() {
   }
 
   /**
-   * Compute pillar scores (0-100 scale) from the full HHIScores object.
-   * Delegates to the shared getPillarScore utility in types/index.ts.
-   */
-  function getPillarScores(scores: HHIScores): { ha: number; ge: number; oe: number } {
-    return getPillarScore(scores)
-  }
-
-  /**
    * Format a raw score (0-100) as a display string with one decimal place.
    * e.g. 87.5 → "87.5"
    */
@@ -36,7 +28,6 @@ export function useScores() {
   return {
     getTierLabel,
     getTierColor,
-    getPillarScores,
     formatScore,
   }
 }

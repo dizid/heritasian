@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless'
 import type { Handler, HandlerEvent, HandlerResponse } from '@netlify/functions'
-import { HHI_SQL, transformHotel } from '../../src/data/db'
+import { transformHotel } from '../../src/data/db'
+import { TIER_BOUNDS } from '../../src/lib/scoring'
 
 // CORS headers for local dev and production
 const CORS_HEADERS = {
@@ -26,25 +27,15 @@ function err(statusCode: number, message: string): HandlerResponse {
   }
 }
 
-// Map sort param to actual SQL column or expression
-function resolveSortColumn(sort: string): string {
-  const map: Record<string, string> = {
-    hhi: 'hhi',
-    ha: `(score_historical_significance * 15 + score_architectural_integrity * 15 + score_cultural_immersion * 10) / 40.0`,
-    ge: `(score_authentic_experience * 15 + score_reputation * 12 + score_service_quality * 8) / 35.0`,
-    oe: `(score_conservation * 10 + score_modern_comforts * 8 + score_value * 7) / 25.0`,
-    name: 'name',
-    year: 'year_built',
-  }
-  return map[sort] ?? 'hhi'
-}
-
-// Tier to HHI score range for filtering
-const TIER_RANGES: Record<string, { min: number; max: number }> = {
-  landmark:      { min: 85, max: 100 },
-  distinguished: { min: 70, max: 84.99 },
-  notable:       { min: 55, max: 69.99 },
-  emerging:      { min: 0,  max: 54.99 },
+// Map sort param to actual SQL column name.
+// Pillar scores are now generated columns — no more inline SQL formulas.
+const SORT_COLUMNS: Record<string, string> = {
+  hhi: 'hhi',
+  ha: 'pillar_ha',
+  ge: 'pillar_ge',
+  oe: 'pillar_oe',
+  name: 'name',
+  year: 'year_built',
 }
 
 async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchParams): Promise<HandlerResponse> {
@@ -75,13 +66,13 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
     paramIndex++
   }
 
-  // Tier filter: translate to HHI ranges
+  // Tier filter: translate tier names to HHI ranges using the generated hhi column
   if (tiers.length > 0) {
     const tierConditions = tiers
-      .filter(t => TIER_RANGES[t])
+      .filter(t => t in TIER_BOUNDS)
       .map(t => {
-        const { min, max } = TIER_RANGES[t]
-        return `(${HHI_SQL.trim().split('AS hhi')[0].trim()} BETWEEN ${min} AND ${max})`
+        const { min, max } = TIER_BOUNDS[t as keyof typeof TIER_BOUNDS]
+        return `(hhi BETWEEN ${min} AND ${max})`
       })
     if (tierConditions.length > 0) {
       conditions.push(`(${tierConditions.join(' OR ')})`)
@@ -89,22 +80,18 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
   }
 
   const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
-  const sortColumn = resolveSortColumn(sort)
+  const sortColumn = SORT_COLUMNS[sort] ?? 'hhi'
 
-  // Use CTE to compute HHI once, then sort on it
   const query = `
-    WITH scored AS (
-      SELECT
-        id, slug, name, country_code, city, year_built, original_purpose,
-        architectural_style, tagline, description, highlights, image_url, website_url,
-        price_range,
-        score_historical_significance, score_architectural_integrity, score_cultural_immersion,
-        score_authentic_experience, score_reputation, score_service_quality,
-        score_conservation, score_modern_comforts, score_value,
-        ${HHI_SQL}
-      FROM hotels
-    )
-    SELECT * FROM scored
+    SELECT
+      id, slug, name, country_code, city, year_built, original_purpose,
+      architectural_style, tagline, description, highlights, image_url, website_url,
+      price_range,
+      score_historical_significance, score_architectural_integrity, score_cultural_immersion,
+      score_authentic_experience, score_reputation, score_service_quality,
+      score_conservation, score_modern_comforts, score_value,
+      hhi, pillar_ha, pillar_ge, pillar_oe
+    FROM hotels
     ${whereClause}
     ORDER BY ${sortColumn} ${order}
   `
@@ -115,23 +102,19 @@ async function handleGetHotels(sql: ReturnType<typeof neon>, params: URLSearchPa
 
 async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string): Promise<HandlerResponse> {
   const rows = await sql.query(`
-    WITH scored AS (
-      SELECT
-        h.*,
-        ${HHI_SQL},
-        COALESCE(
-          json_agg(
-            json_build_object('year', te.year, 'event', te.event)
-            ORDER BY te.year
-          ) FILTER (WHERE te.id IS NOT NULL),
-          '[]'
-        ) AS timeline
-      FROM hotels h
-      LEFT JOIN timeline_events te ON te.hotel_id = h.id
-      WHERE h.slug = $1
-      GROUP BY h.id
-    )
-    SELECT * FROM scored
+    SELECT
+      h.*,
+      COALESCE(
+        json_agg(
+          json_build_object('year', te.year, 'event', te.event)
+          ORDER BY te.year
+        ) FILTER (WHERE te.id IS NOT NULL),
+        '[]'
+      ) AS timeline
+    FROM hotels h
+    LEFT JOIN timeline_events te ON te.hotel_id = h.id
+    WHERE h.slug = $1
+    GROUP BY h.id
   `, [slug])
 
   if (rows.length === 0) {

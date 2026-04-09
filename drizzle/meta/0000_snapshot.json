@@ -1,0 +1,389 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.countries": {
+      "name": "countries",
+      "schema": "",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "varchar(2)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flag": {
+          "name": "flag",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.timeline_events": {
+      "name": "timeline_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "hotel_id": {
+          "name": "hotel_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event": {
+          "name": "event",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_timeline_hotel": {
+          "name": "idx_timeline_hotel",
+          "columns": [
+            {
+              "expression": "hotel_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "timeline_events_hotel_id_fkey": {
+          "name": "timeline_events_hotel_id_fkey",
+          "tableFrom": "timeline_events",
+          "tableTo": "hotels",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "hotel_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.hotels": {
+      "name": "hotels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country_code": {
+          "name": "country_code",
+          "type": "varchar(2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "year_built": {
+          "name": "year_built",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "original_purpose": {
+          "name": "original_purpose",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "architectural_style": {
+          "name": "architectural_style",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "highlights": {
+          "name": "highlights",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "website_url": {
+          "name": "website_url",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_range": {
+          "name": "price_range",
+          "type": "varchar(4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_historical_significance": {
+          "name": "score_historical_significance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_architectural_integrity": {
+          "name": "score_architectural_integrity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_cultural_immersion": {
+          "name": "score_cultural_immersion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_authentic_experience": {
+          "name": "score_authentic_experience",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_reputation": {
+          "name": "score_reputation",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_service_quality": {
+          "name": "score_service_quality",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_conservation": {
+          "name": "score_conservation",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_modern_comforts": {
+          "name": "score_modern_comforts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "score_value": {
+          "name": "score_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "tagline": {
+          "name": "tagline",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_hotels_country": {
+          "name": "idx_hotels_country",
+          "columns": [
+            {
+              "expression": "country_code",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_hotels_slug": {
+          "name": "idx_hotels_slug",
+          "columns": [
+            {
+              "expression": "slug",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "hotels_country_code_fkey": {
+          "name": "hotels_country_code_fkey",
+          "tableFrom": "hotels",
+          "tableTo": "countries",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "country_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "hotels_slug_key": {
+          "columns": [
+            "slug"
+          ],
+          "nullsNotDistinct": false,
+          "name": "hotels_slug_key"
+        }
+      },
+      "checkConstraints": {
+        "hotels_price_range_check": {
+          "name": "hotels_price_range_check",
+          "value": "(price_range)::text = ANY ((ARRAY['$'::character varying, '$$'::character varying, '$$$'::character varying, '$$$$'::character varying])::text[])"
+        },
+        "hotels_score_historical_significance_check": {
+          "name": "hotels_score_historical_significance_check",
+          "value": "(score_historical_significance >= 0) AND (score_historical_significance <= 100)"
+        },
+        "hotels_score_architectural_integrity_check": {
+          "name": "hotels_score_architectural_integrity_check",
+          "value": "(score_architectural_integrity >= 0) AND (score_architectural_integrity <= 100)"
+        },
+        "hotels_score_cultural_immersion_check": {
+          "name": "hotels_score_cultural_immersion_check",
+          "value": "(score_cultural_immersion >= 0) AND (score_cultural_immersion <= 100)"
+        },
+        "hotels_score_authentic_experience_check": {
+          "name": "hotels_score_authentic_experience_check",
+          "value": "(score_authentic_experience >= 0) AND (score_authentic_experience <= 100)"
+        },
+        "hotels_score_reputation_check": {
+          "name": "hotels_score_reputation_check",
+          "value": "(score_reputation >= 0) AND (score_reputation <= 100)"
+        },
+        "hotels_score_service_quality_check": {
+          "name": "hotels_score_service_quality_check",
+          "value": "(score_service_quality >= 0) AND (score_service_quality <= 100)"
+        },
+        "hotels_score_conservation_check": {
+          "name": "hotels_score_conservation_check",
+          "value": "(score_conservation >= 0) AND (score_conservation <= 100)"
+        },
+        "hotels_score_modern_comforts_check": {
+          "name": "hotels_score_modern_comforts_check",
+          "value": "(score_modern_comforts >= 0) AND (score_modern_comforts <= 100)"
+        },
+        "hotels_score_value_check": {
+          "name": "hotels_score_value_check",
+          "value": "(score_value >= 0) AND (score_value <= 100)"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "hotels": {
+        "columns": {
+          "highlights": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          }
+        }
+      }
+    }
+  }
+}

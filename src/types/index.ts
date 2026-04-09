@@ -65,58 +65,6 @@ export const COUNTRIES: Country[] = [
   { code: 'LA', name: 'Laos', flag: '\u{1F1F1}\u{1F1E6}' },
 ]
 
-export const TIER_CONFIG: Record<Tier, { label: string; min: number; max: number; color: string }> = {
-  landmark: { label: 'Heritage Landmark', min: 85, max: 100, color: '#c9a96e' },
-  distinguished: { label: 'Heritage Distinguished', min: 70, max: 84, color: '#b5c1ad' },
-  notable: { label: 'Heritage Notable', min: 55, max: 69, color: '#a3b3d4' },
-  emerging: { label: 'Heritage Emerging', min: 40, max: 54, color: '#c9a5a5' },
-}
-
-export function getTier(score: number): Tier {
-  if (score >= 85) return 'landmark'
-  if (score >= 70) return 'distinguished'
-  if (score >= 55) return 'notable'
-  return 'emerging'
-}
-
-export function calculateHHI(scores: HHIScores): number {
-  const ha =
-    scores.heritageAuthenticity.historicalSignificance * 0.15 +
-    scores.heritageAuthenticity.architecturalIntegrity * 0.15 +
-    scores.heritageAuthenticity.culturalImmersion * 0.10
-
-  const ge =
-    scores.guestExperience.authenticExperience * 0.15 +
-    scores.guestExperience.reputationScore * 0.12 +
-    scores.guestExperience.serviceQuality * 0.08
-
-  const oe =
-    scores.operationalExcellence.conservationCommitment * 0.10 +
-    scores.operationalExcellence.modernComforts * 0.08 +
-    scores.operationalExcellence.valuePositioning * 0.07
-
-  return Math.round((ha + ge + oe) * 100) / 100
-}
-
-export function getPillarScore(scores: HHIScores): { ha: number; ge: number; oe: number } {
-  const ha =
-    (scores.heritageAuthenticity.historicalSignificance * 15 +
-      scores.heritageAuthenticity.architecturalIntegrity * 15 +
-      scores.heritageAuthenticity.culturalImmersion * 10) / 40
-
-  const ge =
-    (scores.guestExperience.authenticExperience * 15 +
-      scores.guestExperience.reputationScore * 12 +
-      scores.guestExperience.serviceQuality * 8) / 35
-
-  const oe =
-    (scores.operationalExcellence.conservationCommitment * 10 +
-      scores.operationalExcellence.modernComforts * 8 +
-      scores.operationalExcellence.valuePositioning * 7) / 25
-
-  return {
-    ha: Math.round(ha * 10) / 10,
-    ge: Math.round(ge * 10) / 10,
-    oe: Math.round(oe * 10) / 10,
-  }
-}
+// Re-export from canonical scoring module for backward compatibility.
+// 8 components import TIER_CONFIG from '@/types' — this alias preserves those imports.
+export { TIER_BOUNDS as TIER_CONFIG, getTier } from '../lib/scoring'

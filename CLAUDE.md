@@ -71,4 +71,6 @@ The function computes HHI in SQL via a CTE and transforms flat DB rows into the 
 
 ## Database
 
-Tables: `hotels` (all score columns are `score_*` snake_case), `timeline_events` (foreign key to `hotels.id`), `countries`. No migrations directory exists yet — schema managed directly.
+Tables: `hotels` (all score columns are `score_*` snake_case, all IDs are UUIDs), `timeline_events` (FK to `hotels.id` with CASCADE), `countries` (dormant — FK target for `hotels.country_code` but not queried by app code).
+
+Schema managed via **drizzle-kit** (`drizzle.config.ts`). Baseline + evolution migrations live in `drizzle/`. Migrations are run **manually from a dev workstation** — never in Netlify build. Use `npx drizzle-kit check` to detect drift between `drizzle/schema.ts` and the live DB.

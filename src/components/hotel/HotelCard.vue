@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Hotel } from '@/types'
-import { COUNTRIES, TIER_CONFIG, getPillarScore } from '@/types'
+import { COUNTRIES, TIER_CONFIG } from '@/types'
 import TierBadge from '@/components/shared/TierBadge.vue'
 import ScoreBar from '@/components/shared/ScoreBar.vue'
 
@@ -15,7 +15,7 @@ const country = computed(() =>
   COUNTRIES.find(c => c.code === props.hotel.country)
 )
 
-const pillar = computed(() => getPillarScore(props.hotel.scores))
+const pillar = computed(() => props.hotel.pillarScores)
 const tierConfig = computed(() => TIER_CONFIG[props.hotel.tier])
 </script>
 
