@@ -1,4 +1,4 @@
-import { pgTable, varchar, index, foreignKey, uuid, integer, text, unique, check, timestamp, numeric } from "drizzle-orm/pg-core"
+import { pgTable, varchar, index, foreignKey, uuid, integer, text, unique, check, timestamp, numeric, serial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -11,7 +11,7 @@ export const countries = pgTable("countries", {
 
 export const timelineEvents = pgTable("timeline_events", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
-	hotelId: uuid("hotel_id"),
+	hotelId: uuid("hotel_id").notNull(),
 	year: integer().notNull(),
 	event: text().notNull(),
 }, (table) => [
@@ -47,6 +47,7 @@ export const hotels = pgTable("hotels", {
 	scoreModernComforts: integer("score_modern_comforts").notNull(),
 	scoreValue: integer("score_value").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	tagline: varchar({ length: 200 }),
 	hhi: numeric({ precision: 5, scale: 2 }).generatedAlwaysAs(sql`round(((((((((score_historical_significance)::numeric * 0.15) + ((score_architectural_integrity)::numeric * 0.15)) + ((score_cultural_immersion)::numeric * 0.10)) + ((score_authentic_experience)::numeric * 0.15)) + ((score_reputation)::numeric * 0.12)) + ((score_service_quality)::numeric * 0.08)) + ((score_conservation)::numeric * 0.10)) + ((score_modern_comforts)::numeric * 0.08)) + ((score_value)::numeric * 0.07)), 2)`),
 	pillarHa: numeric("pillar_ha", { precision: 5, scale: 2 }).generatedAlwaysAs(sql`round((((((score_historical_significance * 15) + (score_architectural_integrity * 15)) + (score_cultural_immersion * 10)))::numeric / 40.0), 1)`),
@@ -71,4 +72,22 @@ export const hotels = pgTable("hotels", {
 	check("hotels_score_conservation_check", sql`(score_conservation >= 0) AND (score_conservation <= 100)`),
 	check("hotels_score_modern_comforts_check", sql`(score_modern_comforts >= 0) AND (score_modern_comforts <= 100)`),
 	check("hotels_score_value_check", sql`(score_value >= 0) AND (score_value <= 100)`),
+]);
+
+export const scoreEvidence = pgTable("score_evidence", {
+	id: serial().primaryKey(),
+	hotelId: uuid("hotel_id").notNull().references(() => hotels.id, { onDelete: "cascade" }),
+	dimension: text().notNull(),
+	sourceUrl: text("source_url"),
+	excerpt: text(),
+	notes: text(),
+	ratingRationale: text("rating_rationale"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_score_evidence_hotel_dim").on(table.hotelId, table.dimension),
+	check("score_evidence_dimension_check", sql`dimension IN (
+		'historical_significance', 'architectural_integrity', 'cultural_immersion',
+		'authentic_experience', 'reputation', 'service_quality',
+		'conservation', 'modern_comforts', 'value'
+	)`),
 ]);

@@ -6,6 +6,7 @@ import { useHotels } from '@/composables/useHotels'
 import TierBadge from '@/components/shared/TierBadge.vue'
 import HotelScoreBadge from '@/components/hotel/HotelScoreBadge.vue'
 import HotelTimeline from '@/components/hotel/HotelTimeline.vue'
+import WhyThisScore from '@/components/hotel/WhyThisScore.vue'
 import { useHead } from '@unhead/vue'
 import { useSeo } from '@/composables/useSeo'
 
@@ -165,6 +166,9 @@ useHead(() => {
           <TierBadge :tier="hotel.tier" size="md" />
         </div>
       </div>
+
+      <!-- Why This Score -->
+      <WhyThisScore :hotel="hotel" />
 
       <!-- Description + highlights -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">

@@ -25,6 +25,18 @@ export interface HHIScores {
   }
 }
 
+export type ScoreDimension =
+  | 'historical_significance' | 'architectural_integrity' | 'cultural_immersion'
+  | 'authentic_experience' | 'reputation' | 'service_quality'
+  | 'conservation' | 'modern_comforts' | 'value'
+
+export interface EvidenceItem {
+  sourceUrl: string | null
+  excerpt: string | null
+  notes: string | null
+  ratingRationale: string | null
+}
+
 export interface Hotel {
   id: string
   slug: string
@@ -45,6 +57,7 @@ export interface Hotel {
   tier: Tier
   pillarScores: { ha: number; ge: number; oe: number }
   timeline: TimelineEvent[]
+  evidence: Partial<Record<ScoreDimension, EvidenceItem[]>>
 }
 
 export interface Country {

@@ -1,6 +1,23 @@
 import { neon } from '@neondatabase/serverless'
-import type { Hotel } from '../types'
+import type { Hotel, ScoreDimension } from '../types'
 import { getTier } from '../lib/scoring'
+
+// Group flat evidence rows by dimension
+function groupEvidence(raw: unknown[]): Hotel['evidence'] {
+  const result: Hotel['evidence'] = {}
+  if (!Array.isArray(raw)) return result
+  for (const item of raw as Array<{ dimension: string; sourceUrl: string | null; excerpt: string | null; notes: string | null; ratingRationale: string | null }>) {
+    const dim = item.dimension as ScoreDimension
+    if (!result[dim]) result[dim] = []
+    result[dim]!.push({
+      sourceUrl: item.sourceUrl,
+      excerpt: item.excerpt,
+      notes: item.notes,
+      ratingRationale: item.ratingRationale,
+    })
+  }
+  return result
+}
 
 // Transform a flat DB row into the Hotel interface shape.
 // HHI and pillar scores come from Postgres generated columns — no math here.
@@ -47,6 +64,7 @@ export function transformHotel(row: Record<string, unknown>): Hotel {
       oe: Number(row.pillar_oe),
     },
     timeline: (row.timeline as Array<{ year: number; event: string }>) ?? [],
+    evidence: groupEvidence((row.evidence as unknown[]) ?? []),
   }
 }
 
@@ -68,23 +86,30 @@ export async function fetchAllHotels(connectionString: string): Promise<Hotel[]>
   return rows.map(r => transformHotel(r as Record<string, unknown>))
 }
 
-// Fetch a single hotel by slug, including timeline events
+// Fetch a single hotel by slug, including timeline events and evidence
 export async function fetchHotelBySlug(connectionString: string, slug: string): Promise<Hotel | null> {
   const sql = neon(connectionString)
   const rows = await sql.query(`
     SELECT
       h.*,
-      COALESCE(
-        json_agg(
-          json_build_object('year', te.year, 'event', te.event)
-          ORDER BY te.year
-        ) FILTER (WHERE te.id IS NOT NULL),
-        '[]'
-      ) AS timeline
+      (SELECT COALESCE(json_agg(
+          json_build_object('year', te.year, 'event', te.event) ORDER BY te.year
+        ), '[]')
+       FROM timeline_events te WHERE te.hotel_id = h.id
+      ) AS timeline,
+      (SELECT COALESCE(json_agg(
+          json_build_object(
+            'dimension', se.dimension,
+            'sourceUrl', se.source_url,
+            'excerpt', se.excerpt,
+            'notes', se.notes,
+            'ratingRationale', se.rating_rationale
+          )
+        ), '[]')
+       FROM score_evidence se WHERE se.hotel_id = h.id
+      ) AS evidence
     FROM hotels h
-    LEFT JOIN timeline_events te ON te.hotel_id = h.id
     WHERE h.slug = $1
-    GROUP BY h.id
   `, [slug])
   if (rows.length === 0) return null
   return transformHotel(rows[0] as Record<string, unknown>)

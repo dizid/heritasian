@@ -6,7 +6,7 @@
  * bucketing function (used by transformHotel to derive tier from the DB-computed hhi).
  */
 
-import type { Tier } from '../types'
+import type { Tier, ScoreDimension, HHIScores } from '../types'
 
 // Sub-metric weights as percentages (sum to 100).
 // The Postgres generated column uses these same values — keep in sync via migration.
@@ -32,6 +32,31 @@ export const TIER_BOUNDS: Record<Tier, { label: string; min: number; max: number
   distinguished: { label: 'Heritage Distinguished', min: 70, max: 84.99, color: '#b5c1ad' },
   notable:       { label: 'Heritage Notable',       min: 55, max: 69.99, color: '#a3b3d4' },
   emerging:      { label: 'Heritage Emerging',      min: 40, max: 54.99, color: '#c9a5a5' },
+}
+
+// Canonical mapping from DB dimension keys to display labels, score accessors, weights, and pillar.
+export const DIMENSION_MAP: Record<ScoreDimension, {
+  label: string
+  weight: number
+  pillar: 'ha' | 'ge' | 'oe'
+  getScore: (s: HHIScores) => number
+}> = {
+  historical_significance:  { label: 'Historical Significance',  weight: 15, pillar: 'ha', getScore: s => s.heritageAuthenticity.historicalSignificance },
+  architectural_integrity:  { label: 'Architectural Integrity',  weight: 15, pillar: 'ha', getScore: s => s.heritageAuthenticity.architecturalIntegrity },
+  cultural_immersion:       { label: 'Cultural Immersion',       weight: 10, pillar: 'ha', getScore: s => s.heritageAuthenticity.culturalImmersion },
+  authentic_experience:     { label: 'Authentic Experience',     weight: 15, pillar: 'ge', getScore: s => s.guestExperience.authenticExperience },
+  reputation:               { label: 'Reputation Score',         weight: 12, pillar: 'ge', getScore: s => s.guestExperience.reputationScore },
+  service_quality:          { label: 'Service Quality',          weight:  8, pillar: 'ge', getScore: s => s.guestExperience.serviceQuality },
+  conservation:             { label: 'Conservation Commitment',  weight: 10, pillar: 'oe', getScore: s => s.operationalExcellence.conservationCommitment },
+  modern_comforts:          { label: 'Modern Comforts',          weight:  8, pillar: 'oe', getScore: s => s.operationalExcellence.modernComforts },
+  value:                    { label: 'Value Positioning',        weight:  7, pillar: 'oe', getScore: s => s.operationalExcellence.valuePositioning },
+}
+
+// Pillar display metadata
+export const PILLAR_META: Record<'ha' | 'ge' | 'oe', { label: string; weight: number; color: string }> = {
+  ha: { label: 'Heritage & Authenticity',  weight: 40, color: '#c9a96e' },
+  ge: { label: 'Guest Experience',         weight: 35, color: '#a8b4a0' },
+  oe: { label: 'Operational Excellence',   weight: 25, color: '#8b9fc5' },
 }
 
 // Derive tier from a DB-computed HHI score.

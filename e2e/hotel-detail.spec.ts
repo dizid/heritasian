@@ -81,3 +81,28 @@ test.describe('Hotel detail page', () => {
     await expect(page.getByText('Heritage Emerging').first()).toBeVisible()
   })
 })
+
+test.describe('Why This Score section', () => {
+  test('section is visible with three pillar cards', async ({ page }) => {
+    await page.goto('/hotel/raffles-hotel-singapore')
+    await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
+    await expect(page.getByText('Why This Score')).toBeVisible()
+    await expect(page.getByText('Heritage & Authenticity').first()).toBeVisible()
+    await expect(page.getByText('Guest Experience').first()).toBeVisible()
+    await expect(page.getByText('Operational Excellence').first()).toBeVisible()
+  })
+
+  test('sub-metric scores are shown', async ({ page }) => {
+    await page.goto('/hotel/raffles-hotel-singapore')
+    await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
+    await expect(page.getByText('Historical Significance').first()).toBeVisible()
+    await expect(page.getByText('Architectural Integrity').first()).toBeVisible()
+    await expect(page.getByText('Conservation Commitment').first()).toBeVisible()
+  })
+
+  test('hotels without evidence show Review pending', async ({ page }) => {
+    await page.goto('/hotel/the-henry-hotel-manila')
+    await page.waitForResponse(resp => resp.url().includes('/api/hotels/the-henry') && resp.status() === 200)
+    await expect(page.getByText('Review pending').first()).toBeVisible()
+  })
+})

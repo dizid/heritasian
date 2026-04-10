@@ -100,3 +100,26 @@ test.describe('Score display on rankings', () => {
     await expect(page.getByText(/Showing \d+ heritage hotel/)).toBeVisible()
   })
 })
+
+test.describe('Evidence API contract', () => {
+  test('hotel detail response includes evidence field', async ({ request }) => {
+    const res = await request.get('/api/hotels/raffles-hotel-singapore')
+    const hotel = await res.json()
+    expect(hotel).toHaveProperty('evidence')
+    expect(typeof hotel.evidence).toBe('object')
+  })
+
+  test('evidence dimensions are valid', async ({ request }) => {
+    const res = await request.get('/api/hotels/raffles-hotel-singapore')
+    const hotel = await res.json()
+    const validDimensions = new Set([
+      'historical_significance', 'architectural_integrity', 'cultural_immersion',
+      'authentic_experience', 'reputation', 'service_quality',
+      'conservation', 'modern_comforts', 'value',
+    ])
+    for (const key of Object.keys(hotel.evidence)) {
+      expect(validDimensions.has(key)).toBe(true)
+      expect(Array.isArray(hotel.evidence[key])).toBe(true)
+    }
+  })
+})

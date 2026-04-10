@@ -104,17 +104,24 @@ async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string):
   const rows = await sql.query(`
     SELECT
       h.*,
-      COALESCE(
-        json_agg(
-          json_build_object('year', te.year, 'event', te.event)
-          ORDER BY te.year
-        ) FILTER (WHERE te.id IS NOT NULL),
-        '[]'
-      ) AS timeline
+      (SELECT COALESCE(json_agg(
+          json_build_object('year', te.year, 'event', te.event) ORDER BY te.year
+        ), '[]')
+       FROM timeline_events te WHERE te.hotel_id = h.id
+      ) AS timeline,
+      (SELECT COALESCE(json_agg(
+          json_build_object(
+            'dimension', se.dimension,
+            'sourceUrl', se.source_url,
+            'excerpt', se.excerpt,
+            'notes', se.notes,
+            'ratingRationale', se.rating_rationale
+          )
+        ), '[]')
+       FROM score_evidence se WHERE se.hotel_id = h.id
+      ) AS evidence
     FROM hotels h
-    LEFT JOIN timeline_events te ON te.hotel_id = h.id
     WHERE h.slug = $1
-    GROUP BY h.id
   `, [slug])
 
   if (rows.length === 0) {
