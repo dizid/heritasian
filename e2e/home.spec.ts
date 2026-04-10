@@ -30,10 +30,10 @@ test.describe('Home page', () => {
   })
 
   test('3 pillar cards are visible', async ({ page }) => {
-    const howWeRate = page.locator('section').filter({ hasText: 'How We Rate' })
-    await expect(howWeRate.getByText('Heritage & Authenticity')).toBeVisible()
-    await expect(howWeRate.getByText('Guest Experience')).toBeVisible()
-    await expect(howWeRate.getByText('Operational Excellence')).toBeVisible()
+    const rateSection = page.locator('section').filter({ hasText: 'Heritage Hotel Index' })
+    await expect(rateSection.getByText('Heritage & Authenticity')).toBeVisible()
+    await expect(rateSection.getByText('Guest Experience')).toBeVisible()
+    await expect(rateSection.getByText('Operational Excellence')).toBeVisible()
   })
 
   test('9 country tiles are rendered', async ({ page }) => {
@@ -43,8 +43,8 @@ test.describe('Home page', () => {
     }
   })
 
-  test('Explore Rankings CTA navigates to /rankings', async ({ page }) => {
-    await page.getByRole('link', { name: 'Explore Rankings' }).click()
+  test('View Rankings CTA navigates to /rankings', async ({ page }) => {
+    await page.getByRole('link', { name: 'View Rankings' }).first().click()
     await expect(page).toHaveURL(/\/rankings/)
   })
 

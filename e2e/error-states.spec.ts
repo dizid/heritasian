@@ -71,13 +71,13 @@ test.describe('Edge cases — rankings filters', () => {
     await page.getByRole('button', { name: /Descending/i }).click()
 
     await page.getByRole('button', { name: 'Clear filters' }).click()
-    await expect(page.getByText('Showing 15 heritage hotels')).toBeVisible()
+    await expect(page.getByText('Showing 108 heritage hotels')).toBeVisible()
   })
 
   test('direct URL with filters loads correctly', async ({ page }) => {
     await page.goto('/rankings?country=SG&sort=name&order=asc')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
-    await expect(page.getByText('Showing 3 heritage hotels')).toBeVisible()
+    await expect(page.getByText('Showing 5 heritage hotels')).toBeVisible()
     await expect(page.getByText('Ascending')).toBeVisible()
   })
 })

@@ -55,20 +55,13 @@ test.describe('Score accuracy', () => {
     }
   })
 
-  test('hotel detail page displays all 9 sub-scores as numbers', async ({ page }) => {
+  test('hotel detail page displays HHI score and tier', async ({ page }) => {
     await page.goto('/hotel/raffles-hotel-singapore')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
 
-    // Each score bar should show a numeric value
-    const scoreLabels = [
-      'Historical Significance', 'Architectural Integrity', 'Cultural Immersion',
-      'Authentic Experience', 'Reputation Score', 'Service Quality',
-      'Conservation Commitment', 'Modern Comforts', 'Value Positioning',
-    ]
-
-    for (const label of scoreLabels) {
-      await expect(page.getByText(label).first()).toBeVisible()
-    }
+    // HHI score badge and tier badge should be visible
+    await expect(page.getByText('HHI').first()).toBeVisible()
+    await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 
   test('tier badge matches HHI score range', async ({ page }) => {

@@ -75,7 +75,7 @@ test.describe('Client-side hydration', () => {
     await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
     await expect(page.getByText('Raffles Hotel').first()).toBeVisible()
     // Proves hydration works — can click links
-    await page.getByRole('link', { name: 'Explore Rankings' }).click()
+    await page.getByRole('link', { name: 'View Rankings' }).first().click()
     await expect(page).toHaveURL(/\/rankings/)
   })
 

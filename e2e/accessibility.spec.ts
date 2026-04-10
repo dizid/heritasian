@@ -56,7 +56,9 @@ test.describe('Accessibility — ARIA attributes', () => {
     await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
     await expect(page.getByText('Showing')).toBeVisible()
 
-    await page.locator('select').first().selectOption('KH')
+    // Myanmar + landmark yields zero results
+    await page.locator('select').first().selectOption('MM')
+    await page.locator('select').nth(1).selectOption('landmark')
     await expect(page.getByText('No hotels match')).toBeVisible()
   })
 

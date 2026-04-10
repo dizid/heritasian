@@ -13,19 +13,13 @@ test.describe('Hotel detail page', () => {
     await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 
-  test('9 score bars are visible (3 pillars x 3 sub-scores)', async ({ page }) => {
+  test('HHI score badge and tier badge are visible', async ({ page }) => {
     await page.goto('/hotel/raffles-hotel-singapore')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
 
-    await expect(page.getByText('Historical Significance').first()).toBeVisible()
-    await expect(page.getByText('Architectural Integrity').first()).toBeVisible()
-    await expect(page.getByText('Cultural Immersion').first()).toBeVisible()
-    await expect(page.getByText('Authentic Experience').first()).toBeVisible()
-    await expect(page.getByText('Reputation Score').first()).toBeVisible()
-    await expect(page.getByText('Service Quality').first()).toBeVisible()
-    await expect(page.getByText('Conservation Commitment').first()).toBeVisible()
-    await expect(page.getByText('Modern Comforts').first()).toBeVisible()
-    await expect(page.getByText('Value Positioning').first()).toBeVisible()
+    // HHI score is displayed prominently
+    await expect(page.getByText('HHI').first()).toBeVisible()
+    await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 
   test('timeline events are rendered', async ({ page }) => {

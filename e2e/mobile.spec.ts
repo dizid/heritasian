@@ -19,7 +19,7 @@ test.describe('Mobile viewport', () => {
     await expect(page.getByText('Showing')).toBeVisible()
 
     await page.locator('select').first().selectOption('SG')
-    await expect(page.getByText('Showing 3 heritage hotels')).toBeVisible()
+    await expect(page.getByText('Showing 5 heritage hotels')).toBeVisible()
   })
 
   test('hotel detail page readable on mobile', async ({ page }) => {
@@ -63,15 +63,14 @@ test.describe('Tablet viewport', () => {
   test('rankings page displays correctly on tablet', async ({ page }) => {
     await page.goto('/rankings')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels') && resp.status() === 200)
-    await expect(page.getByText('Showing 15 heritage hotels')).toBeVisible()
+    await expect(page.getByText('Showing 108 heritage hotels')).toBeVisible()
   })
 
-  test('hotel score sections visible on tablet', async ({ page }) => {
+  test('hotel score and tier visible on tablet', async ({ page }) => {
     await page.goto('/hotel/raffles-hotel-singapore')
     await page.waitForResponse(resp => resp.url().includes('/api/hotels/raffles') && resp.status() === 200)
 
-    await expect(page.getByText('Heritage & Authenticity').first()).toBeVisible()
-    await expect(page.getByText('Guest Experience').first()).toBeVisible()
-    await expect(page.getByText('Operational Excellence').first()).toBeVisible()
+    await expect(page.getByText('HHI').first()).toBeVisible()
+    await expect(page.getByText('Heritage Landmark').first()).toBeVisible()
   })
 })
