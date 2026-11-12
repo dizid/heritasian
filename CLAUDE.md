@@ -60,7 +60,9 @@ The function computes HHI in SQL via a CTE and transforms flat DB rows into the 
 
 - **GitHub:** https://github.com/dizid/heritasian
 - **Netlify site:** heritasian (ID: a0128d79-b04e-4eab-8a07-f382a2a06417)
-- **Netlify URL:** https://heritasian.netlify.app
+- **Live domain:** https://heritagehotelindex.com (Netlify primary domain). https://heritasian.netlify.app 301s there (netlify.toml); canonicals, sitemap, robots and JSON-LD use the primary domain (`src/seo/constants.ts`).
+- **Pages:** prerendered as `<route>.html` (e.g. `dist/hotel/<slug>.html`), so `/hotel/<slug>` answers 200; `/hotel/<slug>/` 301s to it.
+- **Deploy (Nov 2026, Netlify Free plan rule):** laptop deploy only. Push to main only with `[skip netlify]` in the newest commit message. Build locally (`npm run build`, needs `.env` with DATABASE_URL; check `[prerender] Generating 112 pages`), then `netlify deploy --prod --no-build --dir dist --functions netlify/functions --site a0128d79-b04e-4eab-8a07-f382a2a06417`. Do NOT use `netlify deploy --build`: its build can't reach the DB, prerenders only the 4 static pages and ships every hotel page as the empty app shell (happened once on Nov 12, fixed minutes later).
 - **Neon project:** heritasian (ID: solitary-glitter-26300820)
 - **Neon branch:** main (ID: br-red-violet-akwqhdc7)
 - **Neon database:** neondb
