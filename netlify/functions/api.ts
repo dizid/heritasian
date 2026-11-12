@@ -132,7 +132,8 @@ async function handleGetHotelBySlug(sql: ReturnType<typeof neon>, slug: string):
 }
 
 async function handleSitemap(sql: ReturnType<typeof neon>): Promise<HandlerResponse> {
-  const baseUrl = process.env.URL || process.env.DEPLOY_URL || 'https://heritasian.netlify.app'
+  // process.env.URL is the site's primary domain (heritagehotelindex.com) on Netlify
+  const baseUrl = process.env.URL || 'https://heritagehotelindex.com'
   const today = new Date().toISOString().split('T')[0]
 
   // Get all hotel slugs

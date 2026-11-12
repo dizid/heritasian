@@ -38,6 +38,15 @@
     Cache-Control = "public, max-age=300, s-maxage=600"
 
 # Redirects (order matters — specific routes before catch-all)
+
+# One public host: the Netlify subdomain 301s to the primary domain, so search
+# engines see one copy of each page (canonicals point there too).
+[[redirects]]
+  from = "https://heritasian.netlify.app/*"
+  to = "https://heritagehotelindex.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"

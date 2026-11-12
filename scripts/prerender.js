@@ -115,10 +115,12 @@ async function prerender() {
         page = page.replace(/<body[^>]*>/, (match) => `${match}\n${head.bodyTagsOpen}`)
       }
 
-      // Write the file
+      // Write the file as <route>.html (not <route>/index.html): Netlify then
+      // serves /hotel/<slug> (the canonical, sitemap and in-app URL) directly;
+      // the folder form answered it with a 301 to /hotel/<slug>/.
       const filePath = route === '/'
         ? path.resolve(distDir, 'index.html')
-        : path.resolve(distDir, route.slice(1), 'index.html')
+        : path.resolve(distDir, `${route.slice(1)}.html`)
 
       fs.mkdirSync(path.dirname(filePath), { recursive: true })
       fs.writeFileSync(filePath, page)
