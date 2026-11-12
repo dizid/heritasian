@@ -1,6 +1,10 @@
 import { neon } from '@neondatabase/serverless'
 import type { Hotel, ScoreDimension } from '../types'
 import { getTier } from '../lib/scoring'
+import { SITE_URL } from '../seo/constants'
+
+/** The one image every hotel card, page and share preview uses (absolute for share previews). */
+export const GENERIC_HOTEL_IMAGE = `${SITE_URL}/og-image.png`
 
 // Group flat evidence rows by dimension
 function groupEvidence(raw: unknown[]): Hotel['evidence'] {
@@ -36,7 +40,12 @@ export function transformHotel(row: Record<string, unknown>): Hotel {
     tagline: (row.tagline as string | null) ?? '',
     description: row.description as string,
     highlights: row.highlights as string[],
-    imageUrl: row.image_url as string,
+    // Every hotel shows the site's own generic image (Chief T-0532, Nov 12 2026).
+    // The stored photos were scraped from the hotels' websites without permission
+    // (see scripts/_deprecated/README.md) or hotlinked from them; the files now sit
+    // in private/scraped-hotel-images/, out of the public site. Licensed photos
+    // (e.g. Wikimedia Commons with attribution) can replace this later.
+    imageUrl: GENERIC_HOTEL_IMAGE,
     websiteUrl: row.website_url as string,
     priceRange: row.price_range as Hotel['priceRange'],
     scores: {
